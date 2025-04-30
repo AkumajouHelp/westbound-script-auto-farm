@@ -8,6 +8,11 @@ Features:
 - Auto farming
 - Low lag
 
+Purpose:
+This script is created to automatically farm coyote coins and sell items in the game Westbound. 
+It helps players grind faster, avoid manual effort, and earn money efficiently with minimal lag. 
+Perfect for users on Android using Arceus X or similar software.
+
 How to Use In Any Software:
 Use it with any Roblox executor that supports loadstring and HttpGet, such as:
 Arceus X
