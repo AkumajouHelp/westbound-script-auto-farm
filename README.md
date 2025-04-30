@@ -14,7 +14,7 @@ This script automatically farms items and sells them in Westbound. It includes f
 - Auto respawn
 - Safe teleport
 - GUI with buttons
-- low lag
+- Low lag
 - Teleport to Train Heist
 - Instant Deposit to Bank
 
