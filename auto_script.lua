@@ -48,128 +48,83 @@ Contact: Discord: ryokun2337.
         Facebook: https://www.facebook.com/profile.php?id=100083718851963
 ]]
 
--- Services
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local player = Players.LocalPlayer
-local char = player.Character or player.CharacterAdded:Wait()
-local hrp = char:WaitForChild("HumanoidRootPart")
-
 -- Anti-AFK
-local antiAFK = true
-spawn(function()
-    local vu = game:GetService("VirtualUser")
-    player.Idled:Connect(function()
-        if antiAFK then
-            vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-            task.wait(1)
-            vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-        end
-    end)
+game:GetService("Players").LocalPlayer.Idled:Connect(function()
+    virtual:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+    wait(1)
+    virtual:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
 end)
 
--- Safe teleport
-local function safeTP(part)
-    if part then
-        hrp.CFrame = part.CFrame + Vector3.new(0, 3, 0)
-        task.wait(0.5)
+-- UI for Android and PC with Dragging Support
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Parent = game.Players.LocalPlayer.PlayerGui  -- Use PlayerGui for mobile compatibility
+
+local ToggleFarm = Instance.new("TextButton", ScreenGui)
+ToggleFarm.Size = UDim2.new(0, 200, 0, 50)
+ToggleFarm.Position = UDim2.new(0, 50, 0, 50)
+ToggleFarm.Text = "Start Auto Farm"
+
+local farming = false
+
+-- Dragging Support for the button
+local dragging = false
+local dragInput, mousePos, offset
+
+ToggleFarm.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        mousePos = input.Position
+        offset = ToggleFarm.Position - UDim2.new(0, mousePos.X, 0, mousePos.Y)
     end
-end
+end)
 
--- Auto Farm
-local autoFarm = false
-local targets = {"Coyote", "Wolf", "Cougar"}
+ToggleFarm.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - mousePos
+        ToggleFarm.Position = UDim2.new(0, delta.X + offset.X.Offset, 0, delta.Y + offset.Y.Offset)
+    end
+end)
 
+ToggleFarm.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
+
+ToggleFarm.MouseButton1Click:Connect(function()
+    farming = not farming
+    ToggleFarm.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
+end)
+
+-- Auto Farm Loop
 spawn(function()
-    while task.wait(2) do
-        if autoFarm then
-            for _, v in pairs(workspace:GetDescendants()) do
-                if table.find(targets, v.Name) and v:FindFirstChild("Humanoid") then
-                    safeTP(v:FindFirstChild("HumanoidRootPart") or v:FindFirstChildOfClass("BasePart"))
-                    v.Humanoid.Health = 0
-                    task.wait(0.2)
+    while true do
+        wait(1)
+        if farming then
+            local enemies = workspace:FindFirstChild("Enemies")
+            if enemies then
+                for _, mob in pairs(enemies:GetChildren()) do
+                    if mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") then
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,5,0)
+                        wait(0.2)
+                        mob.Humanoid.Health = 0
+                    end
                 end
             end
-        end
-    end
-end)
 
--- Auto Sell
-local autoSell = false
-spawn(function()
-    while task.wait(5) do
-        if autoSell then
-            for _, obj in pairs(workspace:GetDescendants()) do
-                if obj.Name == "General Store" and obj:IsA("Model") then
-                    safeTP(obj:FindFirstChild("Part") or obj.PrimaryPart or obj:FindFirstChildOfClass("BasePart"))
-                    task.wait(1.5)
-                end
+            -- Auto Sell (Teleport to General Store)
+            local inv = game.Players.LocalPlayer.Backpack:GetChildren()
+            if #inv >= 10 then -- Adjust this number if needed
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-214, 24, 145) -- General Store position
+                wait(0.5)
+                -- Simulate sell here if needed
             end
         end
     end
 end)
 
 -- Auto Respawn
-local autoRespawn = true
-player.CharacterAdded:Connect(function(newChar)
-    char = newChar
-    hrp = newChar:WaitForChild("HumanoidRootPart")
+game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
+    wait(1)
+    print("Auto Respawn triggered.")
 end)
-
--- Train Teleport (Teleport to Train Heist)
-local function teleportToTrain()
-    for _, v in pairs(workspace:GetDescendants()) do
-        if v.Name == "Train" and v:IsA("Model") then
-            safeTP(v:FindFirstChild("HumanoidRootPart") or v.PrimaryPart)
-            task.wait(0.5)
-        end
-    end
-end
-
--- Instant Deposit (Teleport to Bank and Deposit)
-local function instantDeposit()
-    for _, obj in pairs(workspace:GetDescendants()) do
-        if obj.Name == "Bank" and obj:IsA("Model") then
-            safeTP(obj:FindFirstChild("Part") or obj.PrimaryPart)
-            task.wait(1)
-            -- Assume bank interaction happens here (like pressing E to deposit)
-        end
-    end
-end
-
--- GUI
-local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
-local function makeButton(name, pos, callback)
-    local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(0, 140, 0, 30)
-    btn.Position = pos
-    btn.Text = name
-    btn.BackgroundColor3 = Color3.fromRGB(30,30,30)
-    btn.TextColor3 = Color3.new(1,1,1)
-    btn.Parent = ScreenGui
-    btn.MouseButton1Click:Connect(callback)
-end
-
-makeButton("Toggle Auto Farm", UDim2.new(0, 20, 0, 100), function()
-    autoFarm = not autoFarm
-end)
-
-makeButton("Toggle Auto Sell", UDim2.new(0, 20, 0, 140), function()
-    autoSell = not autoSell
-end)
-
-makeButton("Toggle Anti-AFK", UDim2.new(0, 20, 0, 180), function()
-    antiAFK = not antiAFK
-end)
-
-makeButton("Toggle Auto Respawn", UDim2.new(0, 20, 0, 220), function()
-    autoRespawn = not autoRespawn
-end)
-
-makeButton("Teleport to Train", UDim2.new(0, 20, 0, 260), function()
-    teleportToTrain()
-end)
-
-makeButton("Instant Deposit", UDim2.new(0, 20, 0, 300), function()
-    instantDeposit()
-end) clarifications!
