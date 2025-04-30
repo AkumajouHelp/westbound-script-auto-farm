@@ -24,6 +24,10 @@ Codex
 How to Use In Android:
 Use with Arceus X Neon. Paste the raw link in loadstring() and execute.
 
+
+**`SCRIPT`**
+loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/main/auto_script.lua"))()
+
 Credits:
 Script by AkumajouHelp
 ]]
