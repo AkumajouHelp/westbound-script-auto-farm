@@ -1,5 +1,5 @@
 --[[
-Westbound Auto Farm Script (Fixed Fast Version 2)
+Westbound Auto Farm Script (Fixed Fast Version 3)
 
 This script automatically farms and sells in Westbound.
 
@@ -18,23 +18,19 @@ Perfect for users on Android using Arceus X or similar software.
 
 How to Use In Any Software:
 Use it with any Roblox executor that supports loadstring and HttpGet, such as:
-Arceus X
-Arcexus
-Delta
-Hydrogen
-Codex
+Arceus X, Arcexus, Delta, Hydrogen, Codex
 
 How to Use In Android:
 Use with Arceus X Neon. Paste the raw link in loadstring() and execute.
 
-**`SCRIPT`**
+SCRIPT:
 loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/main/auto_script.lua"))()
 
 Credits:
 Script by AkumajouHelp
 ]]
 
--- CONFIG (faster loop times)
+-- CONFIG
 local killCooldown = 0.5
 local sellCooldown = 2
 local teleportCooldown = 4
@@ -42,44 +38,42 @@ local teleportCooldown = 4
 -- UTILITIES
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
+
 local function getHumanoidRootPart()
     return LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 end
 
--- AUTO KILL
+-- AUTO KILL COYOTES
 spawn(function()
-    while true do
-        wait(killCooldown)
-        for _, npc in pairs(workspace:GetDescendants()) do
+    while task.wait(killCooldown) do
+        for _, npc in ipairs(workspace:GetDescendants()) do
             if npc.Name == "Coyote" and npc:FindFirstChild("Humanoid") and npc.Humanoid.Health > 0 then
                 local hrp = getHumanoidRootPart()
                 if hrp and npc:FindFirstChild("HumanoidRootPart") then
-                    hrp.CFrame = npc.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0)
-                    wait(0.1)
+                    hrp.CFrame = npc.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+                    task.wait(0.1)
                     local tool = LocalPlayer.Character:FindFirstChildOfClass("Tool")
-                    if tool then 
-                        tool:Activate() 
-                    end
+                    if tool then tool:Activate() end
                 end
             end
         end
     end
 end)
 
--- AUTO SELL
+-- AUTO SELL AT BUTCHER
 spawn(function()
-    while true do
-        wait(sellCooldown)
-        for _, npc in pairs(workspace:GetDescendants()) do
+    while task.wait(sellCooldown) do
+        for _, npc in ipairs(workspace:GetDescendants()) do
             if npc.Name == "Butcher" and npc:IsA("Model") and npc:FindFirstChild("HumanoidRootPart") then
                 local hrp = getHumanoidRootPart()
                 if hrp then
-                    hrp.CFrame = npc.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0)
-                    wait(0.5)
-                    -- Selling Method (Assuming you need to interact with a GUI or button)
-                    local sellButton = game:GetService("ReplicatedStorage"):FindFirstChild("SellButton")  -- Adjust the path to the sell button
-                    if sellButton then
-                        sellButton:Click()  -- This simulates a click to sell items
+                    hrp.CFrame = npc.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+                    task.wait(0.5)
+
+                    -- Try to simulate interaction (placeholder logic)
+                    local proximityPrompt = npc:FindFirstChildOfClass("ProximityPrompt", true)
+                    if proximityPrompt then
+                        fireproximityprompt(proximityPrompt)
                     end
                 end
             end
@@ -87,7 +81,7 @@ spawn(function()
     end
 end)
 
--- AUTO TELEPORT
+-- RANDOM TELEPORT POINTS
 local teleportPoints = {
     Vector3.new(400, 50, 900),
     Vector3.new(500, 50, 1000),
@@ -96,8 +90,7 @@ local teleportPoints = {
 }
 
 spawn(function()
-    while true do
-        wait(teleportCooldown)
+    while task.wait(teleportCooldown) do
         local hrp = getHumanoidRootPart()
         if hrp then
             local point = teleportPoints[math.random(1, #teleportPoints)]
