@@ -1,58 +1,18 @@
 --[[
-Westbound Auto Farm Script (Fixed Fast Version 4)
-
-This script automatically farms and sells in Westbound,
-with GUI toggles to enable/disable each feature.
+Westbound Auto Farm Script (For Android/PC - Arceus X Neon or similar software)
 
 Features:
-- Auto-sell when inventory is full
-- Auto-farming for quick coin collection
-- Optimized for no lag and minimal crashes
-- Auto sell
-- Auto farming
-- Fast auto kill
-- Faster selling
-- Quicker teleporting
 - Auto farm coyotes
-- Auto sell at General Store
-- Anti-AFK (stay in-game)
+- Auto sell when inventory full
+- Fast auto kill
+- Faster teleporting
+- Low lag & safe teleports
+- Anti-AFK
 - Auto respawn
-- Safe teleport
-- GUI with buttons
-- Low lag
+- GUI with toggle buttons
 - Teleport to Train Heist
 - Instant Deposit to Bank
-
-Purpose:
-This script is created to automatically farm coyote coins and sell items in the game Westbound. 
-It helps players grind faster, avoid manual effort, and earn money efficiently with minimal lag. 
-Perfect for users on Android using Arceus X or similar software.
-
-**APPLICATION:**
-https://www.mediafire.com/file/p5s58u1u34da2rn/Roblox_Arceus_X_NEO_1.6.5.apk/file?dkey=vr8ys86usvq&r=1127
-
-How to Use In Any Software:
-Use it with any Roblox executor that supports loadstring and HttpGet, such as:
-Arceus X, Arcexus, Delta, Hydrogen, Codex
-
-How to Use In Android:
-Use with Arceus X Neon. Paste the raw link in loadstring() and execute.
-
-Quick Command:
-To toggle the auto farm, just type !togglefarm in the Roblox chat.
-
-SCRIPT:
-loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/main/auto_script.lua"))()
-
-Credits:
-Script by AkumajouHelp.
-Modified by Ryokun.
-Contact: Discord: ryokun2337.
-        Facebook: https://www.facebook.com/profile.php?id=100083718851963
 ]]
-
--- Define Virtual Input Manager for Anti-AFK
-local virtual = game:GetService("VirtualInputManager")
 
 -- Anti-AFK
 game:GetService("Players").LocalPlayer.Idled:Connect(function()
@@ -75,18 +35,6 @@ ToggleFarm.MouseButton1Click:Connect(function()
     ToggleFarm.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
 end)
 
--- Chat Command to Toggle Auto Farm
-game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
-    if message:lower() == "!togglefarm" then
-        farming = not farming
-        if farming then
-            print("Auto farming started!")
-        else
-            print("Auto farming stopped!")
-        end
-    end
-end)
-
 -- Auto Farm Loop
 spawn(function()
     while true do
@@ -95,15 +43,12 @@ spawn(function()
             local enemies = workspace:FindFirstChild("Enemies")
             if enemies then
                 for _, mob in pairs(enemies:GetChildren()) do
-                    if mob and mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") then
-                        -- Move to the mob's position and kill it
+                    if mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") then
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,5,0)
                         wait(0.2)
                         mob.Humanoid.Health = 0
                     end
                 end
-            else
-                print("No enemies found!")
             end
 
             -- Auto Sell (Teleport to General Store)
@@ -111,7 +56,7 @@ spawn(function()
             if #inv >= 10 then -- adjust if needed
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-214, 24, 145) -- General Store position
                 wait(0.5)
-                -- simulate sell here if needed (you can add specific logic for selling items here)
+                -- simulate sell here if needed
             end
         end
     end
@@ -121,4 +66,13 @@ end)
 game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
     wait(1)
     print("Auto Respawn triggered.")
+end)
+
+-- Chat Command to Toggle Auto Farm
+game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
+    if message == "!togglefarm" then
+        farming = not farming
+        ToggleFarm.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
+        print(farming and "Auto Farm Started" or "Auto Farm Stopped")
+    end
 end)
