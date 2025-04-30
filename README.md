@@ -31,8 +31,8 @@ Use it with **any Roblox executor** that supports `loadstring` and `HttpGet`, su
 **`SCRIPT`**
 loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/main/auto_script.lua"))()
 ### Credits:
-Created by AkumajouHelp
-Modified by Ryokun
+Created by AkumajouHelp.
+Modified by Ryokun.
 Contact: Discord: ryokun2337
 
 
