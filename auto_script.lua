@@ -1,5 +1,5 @@
 --[[
-Westbound Auto Farm Script (Fixed Fast Version)
+Westbound Auto Farm Script (Fixed Fast Version 2)
 
 This script automatically farms and sells in Westbound.
 
