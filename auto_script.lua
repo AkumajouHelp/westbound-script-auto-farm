@@ -14,13 +14,6 @@ Features:
 - Instant Deposit to Bank
 ]]
 
--- Anti-AFK
-game:GetService("Players").LocalPlayer.Idled:Connect(function()
-    virtual:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-    wait(1)
-    virtual:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-end)
-
 -- UI
 local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
 local ToggleFarm = Instance.new("TextButton", ScreenGui)
@@ -35,19 +28,34 @@ ToggleFarm.MouseButton1Click:Connect(function()
     ToggleFarm.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
 end)
 
--- Auto Farm Loop
+-- Chat command listener for !togglefarm
+game.Players.LocalPlayer.Chatted:Connect(function(message)
+    if message:lower() == "!togglefarm" then
+        farming = not farming
+        ToggleFarm.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
+    end
+end)
+
+-- Auto Farm Loop (scans entire map for coyotes)
 spawn(function()
     while true do
         wait(1)
         if farming then
-            local enemies = workspace:FindFirstChild("Enemies")
-            if enemies then
-                for _, mob in pairs(enemies:GetChildren()) do
-                    if mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") then
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,5,0)
-                        wait(0.2)
-                        mob.Humanoid.Health = 0
-                    end
+            local coyotes = {}
+
+            -- Scan the entire map for coyotes
+            for _, mob in pairs(workspace:GetChildren()) do
+                if mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") then
+                    table.insert(coyotes, mob)
+                end
+            end
+
+            -- Attack all detected coyotes
+            for _, coyote in pairs(coyotes) do
+                if coyote and coyote:FindFirstChild("HumanoidRootPart") then
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = coyote.HumanoidRootPart.CFrame + Vector3.new(0,5,0)
+                    wait(0.2)
+                    coyote.Humanoid.Health = 0
                 end
             end
 
@@ -66,13 +74,4 @@ end)
 game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
     wait(1)
     print("Auto Respawn triggered.")
-end)
-
--- Chat Command to Toggle Auto Farm
-game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
-    if message == "!togglefarm" then
-        farming = not farming
-        ToggleFarm.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
-        print(farming and "Auto Farm Started" or "Auto Farm Stopped")
-    end
 end)
