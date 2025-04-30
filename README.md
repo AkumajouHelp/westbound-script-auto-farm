@@ -33,7 +33,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westboun
 ### Credits:
 Created by AkumajouHelp.
 Modified by Ryokun.
-Contact: Discord: ryokun2337
+Contact: Discord: ryokun2337.
 
 
 
