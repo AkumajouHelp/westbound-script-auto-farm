@@ -2,6 +2,7 @@
 Westbound Auto Farm Script
 
 This script automatically farms and sells in Westbound.
+
 Features:
 - Auto sell
 - Auto farming
@@ -15,8 +16,11 @@ Delta
 Hydrogen
 Codex
 
-How to use In Android:
+How to Use In Android:
 Use with Arceus X Neon. Paste the raw link in loadstring() and execute.
+
+Credits:
+Script by AkumajouHelp
 ]]
 
 -- Initialize buttons
