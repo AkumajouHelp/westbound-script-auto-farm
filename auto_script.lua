@@ -1,5 +1,5 @@
 --[[
-Westbound Auto Farm Script
+Westbound Auto Farm Script (Faster Version)
 
 This script automatically farms and sells in Westbound.
 
@@ -7,6 +7,9 @@ Features:
 - Auto sell
 - Auto farming
 - Low lag
+- Fast auto kill
+- Faster selling
+- Quicker teleporting
 
 Purpose:
 This script is created to automatically farm coyote coins and sell items in the game Westbound. 
@@ -32,48 +35,68 @@ Credits:
 Script by AkumajouHelp
 ]]
 
--- Initialize buttons
-local autoKillButton = script.Parent:WaitForChild("AutoKillButton") -- Example: change button path
-local autoSellButton = script.Parent:WaitForChild("AutoSellButton")
-local autoMoveButton = script.Parent:WaitForChild("AutoMoveButton")
+-- CONFIG (faster loop times)
+local killCooldown = 0.5
+local sellCooldown = 2
+local teleportCooldown = 4
 
--- Flag variables to control auto actions
-local autoKillEnabled = false
-local autoSellEnabled = false
-local autoMoveEnabled = false
+-- UTILITIES
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local function getHumanoidRootPart()
+    return LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+end
 
--- Function to toggle Auto Kill
-autoKillButton.MouseButton1Click:Connect(function()
-    autoKillEnabled = not autoKillEnabled
-    if autoKillEnabled then
-        while autoKillEnabled do
-            wait(1)  -- Slow down Auto Kill by waiting 1 second between actions
-            -- Add your code for auto killing enemies or animals here
-            print("Killing enemies...")  -- Placeholder action
+-- AUTO KILL
+spawn(function()
+    while true do
+        wait(killCooldown)
+        for _, npc in pairs(workspace:GetDescendants()) do
+            if npc.Name == "Coyote" and npc:FindFirstChild("Humanoid") and npc.Humanoid.Health > 0 then
+                local hrp = getHumanoidRootPart()
+                if hrp and npc:FindFirstChild("HumanoidRootPart") then
+                    hrp.CFrame = npc.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0)
+                    wait(0.1)
+                    local tool = LocalPlayer.Character:FindFirstChildOfClass("Tool")
+                    if tool then tool:Activate() end
+                end
+            end
         end
     end
 end)
 
--- Function to toggle Auto Sell
-autoSellButton.MouseButton1Click:Connect(function()
-    autoSellEnabled = not autoSellEnabled
-    if autoSellEnabled then
-        while autoSellEnabled do
-            wait(3)  -- Slow down Auto Sell by waiting 3 seconds between selling
-            -- Add your code for auto selling items here
-            print("Selling items...")  -- Placeholder action
+-- AUTO SELL
+spawn(function()
+    while true do
+        wait(sellCooldown)
+        for _, npc in pairs(workspace:GetDescendants()) do
+            if npc.Name == "Butcher" and npc:IsA("Model") and npc:FindFirstChild("HumanoidRootPart") then
+                local hrp = getHumanoidRootPart()
+                if hrp then
+                    hrp.CFrame = npc.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0)
+                    wait(0.5)
+                    -- Add actual selling method if needed
+                end
+            end
         end
     end
 end)
 
--- Function to toggle Auto Move (Teleporting)
-autoMoveButton.MouseButton1Click:Connect(function()
-    autoMoveEnabled = not autoMoveEnabled
-    if autoMoveEnabled then
-        while autoMoveEnabled do
-            wait(5)  -- Slow down Auto Move by waiting 5 seconds between moves
-            -- Add your code for auto teleporting to new locations
-            print("Teleporting to a new location...")  -- Placeholder action
+-- AUTO TELEPORT
+local teleportPoints = {
+    Vector3.new(400, 50, 900),
+    Vector3.new(500, 50, 1000),
+    Vector3.new(600, 50, 1100),
+    Vector3.new(450, 50, 950),
+}
+
+spawn(function()
+    while true do
+        wait(teleportCooldown)
+        local hrp = getHumanoidRootPart()
+        if hrp then
+            local point = teleportPoints[math.random(1, #teleportPoints)]
+            hrp.CFrame = CFrame.new(point)
         end
     end
 end)
