@@ -34,6 +34,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westboun
 Created by AkumajouHelp.
 Modified by Ryokun.
 Contact: Discord: ryokun2337.
+        Facebook: https://www.facebook.com/profile.php?id=100083718851963
 
 
 
