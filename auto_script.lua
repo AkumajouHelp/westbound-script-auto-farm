@@ -5,6 +5,9 @@ This script automatically farms and sells in Westbound,
 with GUI toggles to enable/disable each feature.
 
 Features:
+- Auto-sell when inventory is full
+- Auto-farming for quick coin collection
+- Optimized for no lag and minimal crashes
 - Auto sell
 - Auto farming
 - Fast auto kill
