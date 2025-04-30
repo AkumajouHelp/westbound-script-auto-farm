@@ -14,6 +14,9 @@ This script is created to automatically farm coyote coins and sell items in the 
 It helps players grind faster, avoid manual effort, and earn money efficiently with minimal lag. 
 Perfect for users on Android using Arceus X or similar software.
 
+**APPLICATION:**
+https://www.mediafire.com/file/p5s58u1u34da2rn/Roblox_Arceus_X_NEO_1.6.5.apk/file?dkey=vr8ys86usvq&r=1127
+
 
 ### How to Use In Android:
 1. Copy the raw URL of this script from GitHub.
