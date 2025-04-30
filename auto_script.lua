@@ -1,5 +1,5 @@
 --[[
-Westbound Auto Farm Script (Faster Version)
+Westbound Auto Farm Script (Fixed Fast Version)
 
 This script automatically farms and sells in Westbound.
 
@@ -26,7 +26,6 @@ Codex
 
 How to Use In Android:
 Use with Arceus X Neon. Paste the raw link in loadstring() and execute.
-
 
 **`SCRIPT`**
 loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/main/auto_script.lua"))()
@@ -58,7 +57,9 @@ spawn(function()
                     hrp.CFrame = npc.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0)
                     wait(0.1)
                     local tool = LocalPlayer.Character:FindFirstChildOfClass("Tool")
-                    if tool then tool:Activate() end
+                    if tool then 
+                        tool:Activate() 
+                    end
                 end
             end
         end
@@ -75,7 +76,11 @@ spawn(function()
                 if hrp then
                     hrp.CFrame = npc.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0)
                     wait(0.5)
-                    -- Add actual selling method if needed
+                    -- Selling Method (Assuming you need to interact with a GUI or button)
+                    local sellButton = game:GetService("ReplicatedStorage"):FindFirstChild("SellButton")  -- Adjust the path to the sell button
+                    if sellButton then
+                        sellButton:Click()  -- This simulates a click to sell items
+                    end
                 end
             end
         end
