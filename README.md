@@ -5,6 +5,12 @@ This script automatically farms items and sells them in Westbound. It includes f
 - Auto-farming for quick coin collection
 - Optimized for no lag and minimal crashes
 
+Purpose:
+This script is created to automatically farm coyote coins and sell items in the game Westbound. 
+It helps players grind faster, avoid manual effort, and earn money efficiently with minimal lag. 
+Perfect for users on Android using Arceus X or similar software.
+
+
 ### How to Use In Android:
 1. Copy the raw URL of this script from GitHub.
 2. Paste the URL in Arceus X Neon and press Execute.
