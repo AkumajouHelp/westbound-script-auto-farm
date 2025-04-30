@@ -1,3 +1,16 @@
+--[[
+Westbound Auto Farm Script
+
+This script automatically farms and sells in Westbound.
+Features:
+- Auto sell
+- Auto farming
+- Low lag
+
+How to use:
+Use with Arceus X Neon. Paste the raw link in loadstring() and execute.
+]]
+
 -- Initialize buttons
 local autoKillButton = script.Parent:WaitForChild("AutoKillButton") -- Example: change button path
 local autoSellButton = script.Parent:WaitForChild("AutoSellButton")
