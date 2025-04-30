@@ -51,17 +51,32 @@ Contact: Discord: ryokun2337.
         Facebook: https://www.facebook.com/profile.php?id=100083718851963
 ]]
 
+-- Define Virtual Input Manager for Anti-AFK
+local virtual = game:GetService("VirtualInputManager")
+
 -- Anti-AFK
 game:GetService("Players").LocalPlayer.Idled:Connect(function()
-    -- Slight character movement to prevent AFK
-    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 1)
+    virtual:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+    wait(1)
+    virtual:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
 end)
 
--- Simple toggle mechanism for Android (no GUI)
+-- UI
+local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
+local ToggleFarm = Instance.new("TextButton", ScreenGui)
+ToggleFarm.Size = UDim2.new(0, 200, 0, 50)
+ToggleFarm.Position = UDim2.new(0, 50, 0, 50)
+ToggleFarm.Text = "Start Auto Farm"
+
 local farming = false
 
--- Toggle Auto Farm via chat command or button input
-game.Players.LocalPlayer.Chatted:Connect(function(message)
+ToggleFarm.MouseButton1Click:Connect(function()
+    farming = not farming
+    ToggleFarm.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
+end)
+
+-- Chat Command to Toggle Auto Farm
+game:GetService("Players").LocalPlayer.Chatted:Connect(function(message)
     if message:lower() == "!togglefarm" then
         farming = not farming
         if farming then
@@ -77,25 +92,26 @@ spawn(function()
     while true do
         wait(1)
         if farming then
-            -- Find and kill coyotes
             local enemies = workspace:FindFirstChild("Enemies")
             if enemies then
                 for _, mob in pairs(enemies:GetChildren()) do
-                    if mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") then
+                    if mob and mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") then
+                        -- Move to the mob's position and kill it
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,5,0)
                         wait(0.2)
                         mob.Humanoid.Health = 0
                     end
                 end
+            else
+                print("No enemies found!")
             end
 
             -- Auto Sell (Teleport to General Store)
             local inv = game.Players.LocalPlayer.Backpack:GetChildren()
             if #inv >= 10 then -- adjust if needed
-                -- Simulate a teleport to the General Store position
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-214, 24, 145) -- General Store position
                 wait(0.5)
-                -- You may need to simulate a button click for selling items here
+                -- simulate sell here if needed (you can add specific logic for selling items here)
             end
         end
     end
