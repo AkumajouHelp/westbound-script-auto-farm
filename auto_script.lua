@@ -7,7 +7,15 @@ Features:
 - Auto farming
 - Low lag
 
-How to use:
+How to Use In Any Software:
+Use it with any Roblox executor that supports loadstring and HttpGet, such as:
+Arceus X
+Arcexus
+Delta
+Hydrogen
+Codex
+
+How to use In Android:
 Use with Arceus X Neon. Paste the raw link in loadstring() and execute.
 ]]
 
