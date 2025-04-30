@@ -4,6 +4,9 @@ This script automatically farms items and sells them in Westbound. It includes f
 - Auto-sell when inventory is full
 - Auto-farming for quick coin collection
 - Optimized for no lag and minimal crashes
+- Fast auto kill
+- Faster selling
+- Quicker teleporting
 
 Purpose:
 This script is created to automatically farm coyote coins and sell items in the game Westbound. 
