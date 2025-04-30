@@ -40,6 +40,9 @@ Use it with **any Roblox executor** that supports `loadstring` and `HttpGet`, su
 - Hydrogen
 - Codex
 
+**Quick Command:**
+To toggle the auto farm, just type !togglefarm in the Roblox chat.
+
 **`SCRIPT`**
 loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/main/auto_script.lua"))()
 ### Credits:
