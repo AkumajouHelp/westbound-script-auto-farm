@@ -27,7 +27,9 @@ SCRIPT:
 loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/main/auto_script.lua"))()
 
 Credits:
-Script by AkumajouHelp
+Script by AkumajouHelp.
+Modified by Ryokun.
+Contact: Discord: ryokun2337.
 ]]
 
 -- CONFIG
