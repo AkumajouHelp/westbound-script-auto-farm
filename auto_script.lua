@@ -50,50 +50,23 @@ Contact: Discord: ryokun2337.
 
 -- Anti-AFK
 game:GetService("Players").LocalPlayer.Idled:Connect(function()
-    virtual:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-    wait(1)
-    virtual:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+    -- Slight character movement to prevent AFK
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 1)
 end)
 
--- UI for Android and PC with Dragging Support
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Parent = game.Players.LocalPlayer.PlayerGui  -- Use PlayerGui for mobile compatibility
-
-local ToggleFarm = Instance.new("TextButton", ScreenGui)
-ToggleFarm.Size = UDim2.new(0, 200, 0, 50)
-ToggleFarm.Position = UDim2.new(0, 50, 0, 50)
-ToggleFarm.Text = "Start Auto Farm"
-
+-- Simple toggle mechanism for Android (no GUI)
 local farming = false
 
--- Dragging Support for the button
-local dragging = false
-local dragInput, mousePos, offset
-
-ToggleFarm.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = true
-        mousePos = input.Position
-        offset = ToggleFarm.Position - UDim2.new(0, mousePos.X, 0, mousePos.Y)
+-- Toggle Auto Farm via chat command or button input
+game.Players.LocalPlayer.Chatted:Connect(function(message)
+    if message:lower() == "!togglefarm" then
+        farming = not farming
+        if farming then
+            print("Auto farming started!")
+        else
+            print("Auto farming stopped!")
+        end
     end
-end)
-
-ToggleFarm.InputChanged:Connect(function(input)
-    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-        local delta = input.Position - mousePos
-        ToggleFarm.Position = UDim2.new(0, delta.X + offset.X.Offset, 0, delta.Y + offset.Y.Offset)
-    end
-end)
-
-ToggleFarm.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = false
-    end
-end)
-
-ToggleFarm.MouseButton1Click:Connect(function()
-    farming = not farming
-    ToggleFarm.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
 end)
 
 -- Auto Farm Loop
@@ -101,6 +74,7 @@ spawn(function()
     while true do
         wait(1)
         if farming then
+            -- Find and kill coyotes
             local enemies = workspace:FindFirstChild("Enemies")
             if enemies then
                 for _, mob in pairs(enemies:GetChildren()) do
@@ -114,10 +88,11 @@ spawn(function()
 
             -- Auto Sell (Teleport to General Store)
             local inv = game.Players.LocalPlayer.Backpack:GetChildren()
-            if #inv >= 10 then -- Adjust this number if needed
+            if #inv >= 10 then -- adjust if needed
+                -- Simulate a teleport to the General Store position
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-214, 24, 145) -- General Store position
                 wait(0.5)
-                -- Simulate sell here if needed
+                -- You may need to simulate a button click for selling items here
             end
         end
     end
