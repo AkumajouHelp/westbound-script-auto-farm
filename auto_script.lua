@@ -54,6 +54,7 @@ local function loadScript(url)
     if success then
         return response
     else
+        warn("Failed to load script from: " .. url)
         return nil
     end
 end
@@ -63,7 +64,7 @@ local scriptContent = loadScript("https://pastebin.com/raw/5TU8iPKE")
 
 -- If Pastebin fails, try GitHub
 if not scriptContent then
-    scriptContent = loadScript("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/refs/heads/main/auto_script.lua")
+    scriptContent = loadScript("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/main/auto_script.lua")
 end
 
 -- If a script was successfully loaded, execute it
@@ -98,6 +99,11 @@ local function safeTeleport(destination)
     local tween = TweenService:Create(HRP, TweenInfo.new(0.7), {CFrame = targetCFrame})
     tween:Play()
     tween.Completed:Wait()
+
+    -- Check if teleportation was successful
+    if not game.Workspace:FindPartOnRay(Ray.new(HRP.Position, targetCFrame.Position - HRP.Position)) then
+        warn("Failed to teleport to the target position.")
+    end
 end
 
 -- GUI for Toggle Button
@@ -147,7 +153,7 @@ spawn(function()
             -- Auto Sell (General Store)
             local inv = LocalPlayer.Backpack:GetChildren()
             if #inv >= 10 then
-                local sellPos = CFrame.new(-214, 24, 145)
+                local sellPos = CFrame.new(-214, 24, 145) -- This should be dynamic to ensure it works across updates
                 safeTeleport(sellPos)
                 randomizedWait(0.5, 1)  -- Random delay to mimic human-like action
             end
@@ -167,4 +173,24 @@ local function simulateMouseMove()
     local targetPos = mousePos + Vector3.new(math.random(-1, 1), 0, math.random(-1, 1))
     VirtualInputManager:SendMouseMoveEvent(mousePos.X, mousePos.Y, true)
     VirtualInputManager:SendMouseMoveEvent(targetPos.X, targetPos.Y, false)
+end)
+
+-- Ammo Smart System (Placeholder for now)
+local function checkAmmo()
+    -- Placeholder logic for checking ammo
+    local ammo = LocalPlayer.Backpack:FindFirstChild("Ammo")
+    if ammo then
+        if ammo.Value <= 0 then
+            warn("Out of ammo!")
+            -- Auto-buy ammo, switch to melee, or show a warning UI (not implemented yet)
+        end
+    end
 end
+
+-- Auto Ammo check every 5 seconds (placeholder functionality)
+spawn(function()
+    while true do
+        checkAmmo()
+        wait(5)
+    end
+end)
