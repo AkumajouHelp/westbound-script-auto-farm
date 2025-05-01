@@ -45,8 +45,33 @@ Features:
 3. Auto-switch to melee if no bullets
 ]]
 
--- Your actual script code starts here
-loadstring(game:HttpGet("https://pastebin.com/raw/5TU8iPKE"))()
+-- Function to load script from a URL
+local function loadScript(url)
+    local success, response = pcall(function()
+        return game:HttpGet(url)
+    end)
+
+    if success then
+        return response
+    else
+        return nil
+    end
+end
+
+-- First try Pastebin
+local scriptContent = loadScript("https://pastebin.com/raw/5TU8iPKE")
+
+-- If Pastebin fails, try GitHub
+if not scriptContent then
+    scriptContent = loadScript("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/refs/heads/main/auto_script.lua")
+end
+
+-- If a script was successfully loaded, execute it
+if scriptContent then
+    loadstring(scriptContent)()
+else
+    warn("Failed to load the script from both sources.")
+end
 
 -- Services
 local Players = game:GetService("Players")
