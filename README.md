@@ -47,7 +47,14 @@ To toggle the auto farm, just type !togglefarm in the Roblox chat.
 
 **`SCRIPT`**
 
-loadstring(game:HttpGet("https://pastebin.com/raw/5TU8iPKE"))()
+-- Load the script from GitHub (auto updates)
+local success, result = pcall(function()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/main/auto_script.lua"))()
+end)
+
+if not success then
+    warn("[Westbound Auto Farm] Failed to load the script:", result)
+end
 ### Credits:
 Created by AkumajouHelp.
 Modified by Ryokun.
