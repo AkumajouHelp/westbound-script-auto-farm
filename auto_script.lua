@@ -12,6 +12,7 @@ Features:
 - GUI with toggle buttons
 - Teleport to Train Heist
 - Instant Deposit to Bank
+- Chat command: !togglefarm
 ]]
 
 -- Anti-AFK
