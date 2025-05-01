@@ -18,6 +18,7 @@ This script automatically farms items and sells them in Westbound. It includes f
 - Teleport to Train Heist
 - Instant Deposit to Bank
 - Auto farm coyotes across the entire map
+- Anti Cheat
 
 Purpose:
 This script is created to automatically farm coyote coins and sell items in the game Westbound. 
