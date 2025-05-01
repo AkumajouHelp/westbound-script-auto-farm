@@ -1,6 +1,9 @@
 --[[
 Westbound Auto Farm Script (For Android/PC - Arceus X Neon or similar software)
 
+My Main Script Link Page:
+https://github.com/AkumajouHelp/westbound-script-auto-farm
+
 Features:
 - Auto farm coyotes
 - Auto sell when inventory full
