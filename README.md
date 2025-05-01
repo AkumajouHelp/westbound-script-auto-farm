@@ -52,7 +52,5 @@ Created by AkumajouHelp.
 Modified by Ryokun.
 Contact: Discord: ryokun2337.
         Facebook: https://www.facebook.com/profile.php?id=100083718851963
-
-
-
+        PasteBin: https://pastebin.com/u/AkumajouHelp
 
