@@ -41,7 +41,6 @@ spawn(function()
     while true do
         wait(1)
         if farming then
-            -- Find and farm coyotes
             local enemies = workspace:FindFirstChild("Enemies")
             if enemies then
                 for _, mob in pairs(enemies:GetChildren()) do
@@ -61,6 +60,22 @@ spawn(function()
                 -- simulate sell here if needed
             end
         end
+    end
+end)
+
+-- Train Detection
+local function findTrain()
+    local train = workspace:FindFirstChild("Train")
+    if train then
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = train.CFrame + Vector3.new(0, 5, 0)
+    end
+end
+
+-- Teleport to Train
+spawn(function()
+    while true do
+        wait(5)
+        findTrain()
     end
 end)
 
