@@ -38,7 +38,6 @@ Features:
 - Teleport to Train Heist
 - Instant Deposit to Bank
 - Chat command: !togglefarm
-- Anti Cheat
 - Ammo Smart System:
 
 1. Auto-buy ammo when low
