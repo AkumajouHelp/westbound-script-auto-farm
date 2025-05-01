@@ -44,21 +44,22 @@ Features:
 -- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 -- OUT OF OR IN CONNECTION WITH THE SCRIPT OR THE USE OR OTHER DEALINGS IN THE
 -- SCRIPT.
-
+ 
 -- Your actual script code starts here
 loadstring(game:HttpGet("https://pastebin.com/raw/5TU8iPKE"))()
 
--- Services
-local UserInputService = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
-local VirtualUser = game:GetService("VirtualUser")
-
 -- Anti-AFK
+local virtual = game:GetService("VirtualUser")
 game:GetService("Players").LocalPlayer.Idled:Connect(function()
-    VirtualUser:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+    virtual:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
     wait(1)
-    VirtualUser:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+    virtual:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
 end)
+
+-- Random Delay Function to simulate human behavior
+local function randomDelay(min, max)
+    wait(math.random(min, max))
+end
 
 -- UI
 local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
@@ -75,24 +76,16 @@ ToggleFarm.MouseButton1Click:Connect(function()
     print("Farm toggled:", farming)  -- Debug line
 end)
 
--- Helper function to move character smoothly
-local function moveTo(targetPosition)
-    local character = game.Players.LocalPlayer.Character
-    if character then
-        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-        if humanoidRootPart then
-            local distance = (humanoidRootPart.Position - targetPosition).magnitude
-            local speed = 50  -- Adjust for desired speed
-            local duration = distance / speed
-            local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear)
-            local goal = {Position = targetPosition}
-            local tween = TweenService:Create(humanoidRootPart, tweenInfo, goal)
-            tween:Play()
-        end
+-- Chat Command for Toggling Farm
+game.Players.LocalPlayer.Chatted:Connect(function(message)
+    if message:lower() == "!togglefarm" then
+        farming = not farming
+        ToggleFarm.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
+        print("Farm toggled via chat:", farming)  -- Debug line
     end
-end
+end)
 
--- Auto Farm Loop
+-- Auto Farm Loop with random delays and fake movement
 spawn(function()
     while true do
         wait(1)
@@ -102,8 +95,18 @@ spawn(function()
             if enemies then
                 for _, mob in pairs(enemies:GetChildren()) do
                     if mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") then
-                        moveTo(mob.HumanoidRootPart.Position + Vector3.new(0,5,0))
+                        -- Add random delay before moving and attacking
+                        randomDelay(0.5, 1.5)  -- Random delay between 0.5 and 1.5 seconds
+                        
+                        -- Fake random movement around the target to simulate human behavior
+                        local randomOffset = Vector3.new(math.random(-2, 2), 0, math.random(-2, 2))
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + randomOffset
                         wait(0.2)
+                        
+                        -- Add another random delay before attacking
+                        randomDelay(0.2, 0.5)
+                        
+                        -- Attack the Coyote
                         mob.Humanoid.Health = 0
                     end
                 end
@@ -112,9 +115,10 @@ spawn(function()
             -- Auto Sell (Teleport to General Store)
             local inv = game.Players.LocalPlayer.Backpack:GetChildren()
             if #inv >= 10 then -- adjust if needed
-                moveTo(CFrame.new(-214, 24, 145).Position)  -- General Store position
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-214, 24, 145) -- General Store position
                 wait(0.5)
-                -- simulate sell here if needed
+                -- Simulate selling items here (add more logic if necessary)
+                print("Selling items at General Store")  -- Debug line
             end
         end
     end
@@ -124,5 +128,4 @@ end)
 game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
     wait(1)
     print("Auto Respawn triggered.")  -- Debug line
-    -- You may add respawn logic if necessary
 end)
