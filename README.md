@@ -46,6 +46,7 @@ Use it with **any Roblox executor** that supports `loadstring` and `HttpGet`, su
 To toggle the auto farm, just type !togglefarm in the Roblox chat.
 
 **`SCRIPT`**
+
 loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/refs/heads/main/auto_script.lua"))()
 **OR**
 loadstring(game:HttpGet("https://pastebin.com/raw/5TU8iPKE"))()
