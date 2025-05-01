@@ -90,22 +90,6 @@ spawn(function()
     end
 end)
 
--- Train Detection
-local function findTrain()
-    local train = workspace:FindFirstChild("Train")
-    if train then
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = train.CFrame + Vector3.new(0, 5, 0)
-    end
-end
-
--- Teleport to Train
-spawn(function()
-    while true do
-        wait(5)
-        findTrain()
-    end
-end)
-
 -- Auto Respawn
 game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
     wait(1)
