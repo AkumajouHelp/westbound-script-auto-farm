@@ -14,13 +14,30 @@ Features:
 - Instant Deposit to Bank
 ]]
 
--- UI
-local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
-local ToggleFarm = Instance.new("TextButton", ScreenGui)
-ToggleFarm.Size = UDim2.new(0, 200, 0, 50)
-ToggleFarm.Position = UDim2.new(0, 50, 0, 50)
-ToggleFarm.Text = "Start Auto Farm"
+-- Anti-AFK
+local virtual = game:service'VirtualUser'
+game:service'Players'.LocalPlayer.Idled:connect(function()
+    virtual:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+    wait(1)
+    virtual:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+end)
 
+-- UI Setup
+local Player = game.Players.LocalPlayer
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "AutoFarmUI"
+ScreenGui.Parent = Player:WaitForChild("PlayerGui")
+
+local ToggleFarm = Instance.new("TextButton")
+ToggleFarm.Size = UDim2.new(0, 200, 0, 50)
+ToggleFarm.Position = UDim2.new(0, 20, 0, 100)
+ToggleFarm.Text = "Start Auto Farm"
+ToggleFarm.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+ToggleFarm.Parent = ScreenGui
+ToggleFarm.Draggable = true
+ToggleFarm.Active = true
+
+-- State
 local farming = false
 
 ToggleFarm.MouseButton1Click:Connect(function()
@@ -28,50 +45,45 @@ ToggleFarm.MouseButton1Click:Connect(function()
     ToggleFarm.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
 end)
 
--- Chat command listener for !togglefarm
-game.Players.LocalPlayer.Chatted:Connect(function(message)
-    if message:lower() == "!togglefarm" then
+-- Chat command toggle
+Player.Chatted:Connect(function(msg)
+    if msg:lower() == "!togglefarm" then
         farming = not farming
         ToggleFarm.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
     end
 end)
 
--- Auto Farm Loop (scans entire map for coyotes)
-spawn(function()
-    while true do
-        wait(1)
+-- Auto Farm Loop
+task.spawn(function()
+    while task.wait(1) do
         if farming then
-            local coyotes = {}
+            local char = Player.Character
+            if not char or not char:FindFirstChild("HumanoidRootPart") then continue end
 
-            -- Scan the entire map for coyotes
-            for _, mob in pairs(workspace:GetChildren()) do
-                if mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") then
-                    table.insert(coyotes, mob)
+            local enemies = workspace:FindFirstChild("Enemies")
+            if enemies then
+                for _, mob in ipairs(enemies:GetChildren()) do
+                    if mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                        char.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,5,0)
+                        wait(0.2)
+                        mob.Humanoid.Health = 0
+                    end
                 end
             end
 
-            -- Attack all detected coyotes
-            for _, coyote in pairs(coyotes) do
-                if coyote and coyote:FindFirstChild("HumanoidRootPart") then
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = coyote.HumanoidRootPart.CFrame + Vector3.new(0,5,0)
-                    wait(0.2)
-                    coyote.Humanoid.Health = 0
-                end
-            end
-
-            -- Auto Sell (Teleport to General Store)
-            local inv = game.Players.LocalPlayer.Backpack:GetChildren()
-            if #inv >= 10 then -- adjust if needed
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-214, 24, 145) -- General Store position
+            -- Auto Sell
+            local inv = Player.Backpack:GetChildren()
+            if #inv >= 10 then
+                char.HumanoidRootPart.CFrame = CFrame.new(-214, 24, 145) -- General Store
                 wait(0.5)
-                -- simulate sell here if needed
+                -- simulate interaction if needed
             end
         end
     end
 end)
 
 -- Auto Respawn
-game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
+Player.CharacterAdded:Connect(function()
     wait(1)
-    print("Auto Respawn triggered.")
+    print("Auto Respawn triggered")
 end)
