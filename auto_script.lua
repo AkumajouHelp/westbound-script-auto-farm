@@ -1,145 +1,101 @@
 --[[
-Westbound Auto Farm Script (Android/PC – Arceus X Neon Compatible)
-Author: AkumajouHelp (2025)
-MIT License – Free to use, modify, share
+Westbound Auto Farm Script (Enhanced Anti-Cheat and Optimized Performance)
+Author: AkumajouHelp
+MIT License
 ]]
 
--- SETTINGS
-local SELL_POSITION = CFrame.new(-214, 24, 145) -- General Store
-local TRAIN_HEIST_POSITION = CFrame.new(305, 24, 682) -- Example position
-local BANK_POSITION = CFrame.new(-190, 24, 130) -- Example Bank position
-local MAX_INVENTORY = 10
-local AMMO_THRESHOLD = 5
-
--- SERVICES
+-- Services
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local LocalPlayer = Players.LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+local HRP = Character:WaitForChild("HumanoidRootPart")
 
--- ANTI-AFK
+-- Anti-AFK
 LocalPlayer.Idled:Connect(function()
-	VirtualInputManager:SendMouseButtonEvent(0,0,0,true,game,0)
-	wait(1)
-	VirtualInputManager:SendMouseButtonEvent(0,0,0,false,game,0)
+    -- Simulate mouse movement to prevent AFK kick
+    VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 0)
+    wait(math.random(1, 2))
+    VirtualInputManager:SendMouseButtonEvent(0, 0, 0, false, game, 0)
 end)
 
--- GUI
+-- Randomized Teleport Function
+local function safeTeleport(destination)
+    -- Adding slight randomization to teleportation to avoid detection
+    local randomOffset = Vector3.new(math.random(-2, 2), 0, math.random(-2, 2))
+    local targetCFrame = destination + randomOffset
+    local tween = TweenService:Create(HRP, TweenInfo.new(0.7), {CFrame = targetCFrame})
+    tween:Play()
+    tween.Completed:Wait()
+end
+
+-- GUI for Toggle Button
 local gui = Instance.new("ScreenGui", game.CoreGui)
-local button = Instance.new("TextButton", gui)
-button.Size = UDim2.new(0, 200, 0, 50)
-button.Position = UDim2.new(0, 50, 0, 50)
-button.Text = "Start Auto Farm"
-button.BackgroundColor3 = Color3.new(0, 1, 0)
-button.TextSize = 20
+local toggleBtn = Instance.new("TextButton", gui)
+toggleBtn.Size = UDim2.new(0, 200, 0, 50)
+toggleBtn.Position = UDim2.new(0, 50, 0, 50)
+toggleBtn.Text = "Start Auto Farm"
+toggleBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
 
--- AMMO WARNING
-local warningLabel = Instance.new("TextLabel", gui)
-warningLabel.Size = UDim2.new(0, 300, 0, 50)
-warningLabel.Position = UDim2.new(0, 50, 0, 110)
-warningLabel.Text = ""
-warningLabel.TextColor3 = Color3.new(1, 0, 0)
-warningLabel.BackgroundTransparency = 1
-warningLabel.TextSize = 20
-
--- STATE
 local farming = false
 
-local function buyAmmo()
-	local shopRemote = ReplicatedStorage:FindFirstChild("RemoteEvent_BuyAmmo")
-	if shopRemote then
-		shopRemote:FireServer()
-	end
-end
-
-local function checkAmmo()
-	local tool = LocalPlayer.Character:FindFirstChildOfClass("Tool")
-	if tool and tool:FindFirstChild("Ammo") then
-		return tool.Ammo.Value
-	end
-	return 0
-end
-
-local function switchToMelee()
-	for _, item in ipairs(LocalPlayer.Backpack:GetChildren()) do
-		if item:IsA("Tool") and item:FindFirstChild("Type") and item.Type.Value == "Melee" then
-			item.Parent = LocalPlayer.Character
-			break
-		end
-	end
-end
-
--- TOGGLE GUI & CHAT
-button.MouseButton1Click:Connect(function()
-	farming = not farming
-	button.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
-	button.BackgroundColor3 = farming and Color3.new(1, 0, 0) or Color3.new(0, 1, 0)
+toggleBtn.MouseButton1Click:Connect(function()
+    farming = not farming
+    toggleBtn.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
 end)
 
-game.Players.LocalPlayer.Chatted:Connect(function(msg)
-	if msg == "!togglefarm" then
-		button:MouseButton1Click()
-	end
+-- Chat Command Toggle
+game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest.OnClientEvent:Connect(function(msg, sender)
+    if sender == LocalPlayer.Name and msg:lower() == "!togglefarm" then
+        farming = not farming
+        toggleBtn.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
+    end
 end)
 
--- MAIN LOOP
+-- Randomized Wait Function to Avoid Predictability
+local function randomizedWait(min, max)
+    wait(math.random(min, max))
+end
+
+-- Auto Farm (Coyotes)
 spawn(function()
-	while true do
-		wait(1)
-		if farming then
-			-- Check ammo
-			local currentAmmo = checkAmmo()
-			if currentAmmo <= 0 then
-				warningLabel.Text = "OUT OF AMMO! Switching to melee..."
-				switchToMelee()
-			elseif currentAmmo < AMMO_THRESHOLD then
-				warningLabel.Text = "Low Ammo! Auto-buying..."
-				buyAmmo()
-			else
-				warningLabel.Text = ""
-			end
+    while true do
+        randomizedWait(1, 3)  -- Randomized wait to prevent predictable patterns
+        if farming then
+            local enemies = workspace:FindFirstChild("Enemies")
+            if enemies then
+                for _, mob in pairs(enemies:GetChildren()) do
+                    if mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") then
+                        safeTeleport(mob.HumanoidRootPart.CFrame + Vector3.new(0,5,0))
+                        randomizedWait(0.2, 0.5)  -- Randomized delay to mimic human behavior
+                        pcall(function() mob.Humanoid.Health = 0 end)
+                    end
+                end
+            end
 
-			-- Kill Coyotes
-			local enemies = workspace:FindFirstChild("Enemies")
-			if enemies then
-				for _, mob in ipairs(enemies:GetChildren()) do
-					if mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") then
-						HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,5,0)
-						wait(0.2)
-						mob.Humanoid.Health = 0
-					end
-				end
-			end
-
-			-- Auto Sell
-			if #LocalPlayer.Backpack:GetChildren() >= MAX_INVENTORY then
-				HumanoidRootPart.CFrame = SELL_POSITION
-				wait(0.5)
-				local sellRemote = ReplicatedStorage:FindFirstChild("RemoteEvent_SellAll")
-				if sellRemote then sellRemote:FireServer() end
-			end
-
-			-- Auto Bank Deposit (optional)
-			if math.random(1, 10) == 5 then
-				HumanoidRootPart.CFrame = BANK_POSITION
-				wait(0.5)
-				local deposit = ReplicatedStorage:FindFirstChild("RemoteEvent_DepositAll")
-				if deposit then deposit:FireServer() end
-			end
-
-			-- Train Heist Teleport (optional trigger)
-			if math.random(1, 25) == 7 then
-				HumanoidRootPart.CFrame = TRAIN_HEIST_POSITION
-			end
-		end
-	end
+            -- Auto Sell (General Store)
+            local inv = LocalPlayer.Backpack:GetChildren()
+            if #inv >= 10 then
+                local sellPos = CFrame.new(-214, 24, 145)
+                safeTeleport(sellPos)
+                randomizedWait(0.5, 1)  -- Random delay to mimic human-like action
+            end
+        end
+    end
 end)
 
--- AUTO RESPAWN
+-- Auto Respawn
 LocalPlayer.CharacterAdded:Connect(function(char)
-	Character = char
-	HumanoidRootPart = char:WaitForChild("HumanoidRootPart")
-	wait(1)
+    Character = char
+    HRP = Character:WaitForChild("HumanoidRootPart")
 end)
+
+-- Function to Simulate More Human-Like Input
+local function simulateMouseMove()
+    local mousePos = game:GetService("Workspace").CurrentCamera.CFrame.Position
+    local targetPos = mousePos + Vector3.new(math.random(-1, 1), 0, math.random(-1, 1))
+    VirtualInputManager:SendMouseMoveEvent(mousePos.X, mousePos.Y, true)
+    VirtualInputManager:SendMouseMoveEvent(targetPos.X, targetPos.Y, false)
+end
