@@ -16,6 +16,13 @@ Features:
 - Teleport to Train Heist
 - Instant Deposit to Bank
 - Chat command: !togglefarm
+- Ammo Smart System:
+
+1. Auto-buy ammo when low
+
+2. On-screen warning when out of ammo
+
+3. Auto-switch to melee if no bullets
 
 -- MIT License
 -- Copyright (c) 2025 AkumajouHelp
