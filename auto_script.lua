@@ -41,6 +41,7 @@ spawn(function()
     while true do
         wait(1)
         if farming then
+            -- Find and farm coyotes
             local enemies = workspace:FindFirstChild("Enemies")
             if enemies then
                 for _, mob in pairs(enemies:GetChildren()) do
