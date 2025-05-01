@@ -68,6 +68,7 @@ local farming = false
 ToggleFarm.MouseButton1Click:Connect(function()
     farming = not farming
     ToggleFarm.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
+    print("Farm toggled:", farming)  -- Debug line
 end)
 
 -- Auto Farm Loop
@@ -75,6 +76,7 @@ spawn(function()
     while true do
         wait(1)
         if farming then
+            print("Farming started.")  -- Debug line
             local enemies = workspace:FindFirstChild("Enemies")
             if enemies then
                 for _, mob in pairs(enemies:GetChildren()) do
@@ -100,5 +102,5 @@ end)
 -- Auto Respawn
 game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
     wait(1)
-    print("Auto Respawn triggered.")
+    print("Auto Respawn triggered.")  -- Debug line
 end)
