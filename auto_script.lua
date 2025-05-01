@@ -44,16 +44,20 @@ Features:
 -- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 -- OUT OF OR IN CONNECTION WITH THE SCRIPT OR THE USE OR OTHER DEALINGS IN THE
 -- SCRIPT.
- 
+
 -- Your actual script code starts here
 loadstring(game:HttpGet("https://pastebin.com/raw/5TU8iPKE"))()
-]]
+
+-- Services
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local VirtualUser = game:GetService("VirtualUser")
 
 -- Anti-AFK
 game:GetService("Players").LocalPlayer.Idled:Connect(function()
-    virtual:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+    VirtualUser:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
     wait(1)
-    virtual:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+    VirtualUser:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
 end)
 
 -- UI
@@ -71,6 +75,23 @@ ToggleFarm.MouseButton1Click:Connect(function()
     print("Farm toggled:", farming)  -- Debug line
 end)
 
+-- Helper function to move character smoothly
+local function moveTo(targetPosition)
+    local character = game.Players.LocalPlayer.Character
+    if character then
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        if humanoidRootPart then
+            local distance = (humanoidRootPart.Position - targetPosition).magnitude
+            local speed = 50  -- Adjust for desired speed
+            local duration = distance / speed
+            local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear)
+            local goal = {Position = targetPosition}
+            local tween = TweenService:Create(humanoidRootPart, tweenInfo, goal)
+            tween:Play()
+        end
+    end
+end
+
 -- Auto Farm Loop
 spawn(function()
     while true do
@@ -81,7 +102,7 @@ spawn(function()
             if enemies then
                 for _, mob in pairs(enemies:GetChildren()) do
                     if mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") then
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,5,0)
+                        moveTo(mob.HumanoidRootPart.Position + Vector3.new(0,5,0))
                         wait(0.2)
                         mob.Humanoid.Health = 0
                     end
@@ -91,7 +112,7 @@ spawn(function()
             -- Auto Sell (Teleport to General Store)
             local inv = game.Players.LocalPlayer.Backpack:GetChildren()
             if #inv >= 10 then -- adjust if needed
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-214, 24, 145) -- General Store position
+                moveTo(CFrame.new(-214, 24, 145).Position)  -- General Store position
                 wait(0.5)
                 -- simulate sell here if needed
             end
@@ -103,4 +124,5 @@ end)
 game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
     wait(1)
     print("Auto Respawn triggered.")  -- Debug line
+    -- You may add respawn logic if necessary
 end)
