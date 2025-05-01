@@ -1,8 +1,52 @@
+---- MIT License
+-- Copyright (c) 2025 AkumajouHelp
+--
+-- Permission is hereby granted, free of charge, to any person obtaining a copy
+-- of this script and associated documentation files (the "Script"), to deal
+-- in the Script without restriction, including without limitation the rights to
+-- use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+-- the Script, and to permit persons to whom the Script is furnished to do so,
+-- subject to the following conditions:
+--
+-- The above copyright notice and this permission notice shall be included in all
+-- copies or substantial portions of the Script.
+--
+-- THE SCRIPT IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-- OUT OF OR IN CONNECTION WITH THE SCRIPT OR THE USE OR OTHER DEALINGS IN THE
+-- SCRIPT.
+
 --[[
 Westbound Auto Farm Script (Enhanced Anti-Cheat and Optimized Performance)
 Author: AkumajouHelp
-MIT License
+
+My Main Script Link Page:
+https://github.com/AkumajouHelp/westbound-script-auto-farm
+
+Features:
+- Auto farm coyotes
+- Auto sell when inventory full
+- Fast auto kill
+- Faster teleporting
+- Low lag & safe teleports
+- Anti-AFK
+- Auto respawn
+- GUI with toggle buttons
+- Teleport to Train Heist
+- Instant Deposit to Bank
+- Chat command: !togglefarm
+- Ammo Smart System:
+
+1. Auto-buy ammo when low
+2. On-screen warning when out of ammo
+3. Auto-switch to melee if no bullets
 ]]
+
+-- Your actual script code starts here
+loadstring(game:HttpGet("https://pastebin.com/raw/5TU8iPKE"))()
 
 -- Services
 local Players = game:GetService("Players")
