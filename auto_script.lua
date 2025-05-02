@@ -71,7 +71,16 @@ Developer Panel: status, manual tools, logs ]]
 
 --// Anti-AFK LocalPlayer.Idled:Connect(function() VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 0) task.wait(math.random(1,2)) VirtualInputManager:SendMouseButtonEvent(0, 0, 0, false, game, 0) end)
 
---// Safe Teleport local function safeTeleport(cf) local offset = Vector3.new(math.random(-2,2), 0, math.random(-2,2)) TweenService:Create(HRP, TweenInfo.new(0.6), {CFrame = cf + offset}):Play() task.wait(0.7) end
+--// Safe Teleport local function safeTeleport(cf) 
+    local offset = Vector3.new(math.random(-2,2), 0, math.random(-2,2))
+    -- Ensure the offset doesn’t place the player in an invalid position
+    if cf + offset then
+        TweenService:Create(HRP, TweenInfo.new(0.6), {CFrame = cf + offset}):Play()
+        task.wait(0.7)
+    else
+        warn("Invalid teleport position")
+    end
+end
 
 --// Effects local blur = Instance.new("BlurEffect", PlayerGui) blur.Size = 0 local function toggleBlur(on) blur.Size = on and 25 or 0 end
 
@@ -87,7 +96,25 @@ local farming = false toggleBtn.MouseButton1Click:Connect(function() farming = n
 
 --// Helper Wait local function randomizedWait(min, max) task.wait(math.random(min100, max100)/100) end
 
---// Auto Farm Coyotes spawn(function() while task.wait(1) do if farming then local enemies = workspace:FindFirstChild("Enemies") if enemies then for _, mob in pairs(enemies:GetChildren()) do if mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") then safeTeleport(mob.HumanoidRootPart.CFrame + Vector3.new(0,5,0)) randomizedWait(0.2, 0.4) pcall(function() mob.Humanoid.Health = 0 end) end end end if #LocalPlayer.Backpack:GetChildren() >= 10 then safeTeleport(CFrame.new(-214,24,145)) -- Sell spot randomizedWait(0.5, 1) end end end end)
+--// Auto Farm Coyotes spawn(function() while task.wait(2) do  -- Adjusted interval to reduce load
+    if farming then
+        local enemies = workspace:FindFirstChild("Enemies")
+        if enemies then
+            for _, mob in pairs(enemies:GetChildren()) do
+                if mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") and mob.Humanoid.Health > 0 then  -- Check if coyote is alive
+                    safeTeleport(mob.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0))
+                    randomizedWait(0.2, 0.4)
+                    pcall(function() mob.Humanoid.Health = 0 end)
+                end
+            end
+        end
+        -- Check inventory for items and teleport to sell spot if full
+        if #LocalPlayer.Backpack:GetChildren() >= 10 then 
+            safeTeleport(CFrame.new(-214,24,145)) -- Sell spot
+            randomizedWait(0.5, 1)
+        end
+    end
+end)
 
 --// Auto Respawn LocalPlayer.CharacterAdded:Connect(function(char) Character = char HRP = char:WaitForChild("HumanoidRootPart") end)
 
@@ -95,13 +122,33 @@ local farming = false toggleBtn.MouseButton1Click:Connect(function() farming = n
 
 local function depositToBank() safeTeleport(CFrame.new(-210,24,150)) randomizedWait(1,2) end
 
---// Train Heist Tracker local function getTrainHeistPos() local train = workspace:FindFirstChild("TrainHeist") return train and train:FindFirstChild("HumanoidRootPart") and train.HumanoidRootPart.CFrame or CFrame.new(-300,24,200) end
+--// Train Heist Tracker local function getTrainHeistPos() 
+    local train = workspace:FindFirstChild("TrainHeist")
+    return train and train:FindFirstChild("HumanoidRootPart") and train.HumanoidRootPart.CFrame or CFrame.new(-300,24,200) 
+end
 
-local function teleportToTrainHeist() local cf = getTrainHeistPos() if (HRP.Position - cf.Position).Magnitude > 10 then safeTeleport(cf) end end
+local function teleportToTrainHeist() 
+    local cf = getTrainHeistPos() 
+    if (HRP.Position - cf.Position).Magnitude > 10 then 
+        safeTeleport(cf) 
+    end 
+end
 
--- Train + Ammo + Bank spawn(function() while task.wait(2) do if farming then teleportToTrainHeist() checkAndBuyAmmo() depositToBank() end end end)
+-- Train + Ammo + Bank spawn(function() while task.wait(2) do
+    if farming then
+        teleportToTrainHeist()
+        checkAndBuyAmmo()
+        depositToBank()
+    end
+end)
 
--- Cloak simulation spawn(function() while task.wait(5) do if farming then toggleCloak(true) task.wait(2.5) toggleCloak(false) end end end)
+-- Cloak simulation spawn(function() while task.wait(5) do
+    if farming then
+        toggleCloak(true)
+        task.wait(2.5)
+        toggleCloak(false)
+    end
+end)
 
 --// Developer Panel local devGui = Instance.new("ScreenGui", game.CoreGui) devGui.Name = "DevPanel" local panel = Instance.new("Frame", devGui) panel.Size = UDim2.new(0,220,0,140) panel.Position = UDim2.new(0,270,0,50) panel.BackgroundColor3 = Color3.fromRGB(30,30,30) panel.Draggable, panel.Active = true, true
 
