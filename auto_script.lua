@@ -43,7 +43,6 @@ local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local PathfindingService = game:GetService("PathfindingService")
 local LocalPlayer = Players.LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local HRP = Character:WaitForChild("HumanoidRootPart")
@@ -56,34 +55,14 @@ LocalPlayer.Idled:Connect(function()
     VirtualInputManager:SendMouseButtonEvent(0, 0, 0, false, game, 0)
 end)
 
--- Logging System
-local function log(message)
-    print("[AutoFarm Log] " .. message)
-end
-
--- Randomized Teleport Function with Pathfinding
+-- Randomized Teleport Function
 local function safeTeleport(destination)
-    -- Pathfinding to ensure smooth and safe teleportation
-    local path = PathfindingService:CreatePath({
-        AgentRadius = 2,
-        AgentHeight = 5,
-        AgentCanJump = true,
-        AgentJumpHeight = 10,
-        AgentMaxSlope = 45,
-    })
-    
-    path:ComputeAsync(HRP.Position, destination.Position)
-    
-    path.Completed:Connect(function(status)
-        if status == Enum.PathStatus.Complete then
-            HRP.CFrame = destination
-            log("Teleported to " .. tostring(destination))
-        else
-            log("Teleport failed, retrying...")
-        end
-    end)
-    
-    path:MoveTo(destination)
+    -- Adding slight randomization to teleportation to avoid detection
+    local randomOffset = Vector3.new(math.random(-2, 2), 0, math.random(-2, 2))
+    local targetCFrame = destination + randomOffset
+    local tween = TweenService:Create(HRP, TweenInfo.new(0.7), {CFrame = targetCFrame})
+    tween:Play()
+    tween.Completed:Wait()
 end
 
 -- GUI for Toggle Button
@@ -99,7 +78,6 @@ local farming = false
 toggleBtn.MouseButton1Click:Connect(function()
     farming = not farming
     toggleBtn.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
-    log(farming and "Auto Farming Started" or "Auto Farming Stopped")
 end)
 
 -- Chat Command Toggle
@@ -107,8 +85,8 @@ ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest.OnClientEvent:Co
     if sender == LocalPlayer.Name and msg:lower() == "!togglefarm" then
         farming = not farming
         toggleBtn.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
+        -- Chat notification when toggling farming state
         ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(farming and "Auto Farming Started" or "Auto Farming Stopped")
-        log(farming and "Auto Farming Started" or "Auto Farming Stopped")
     end
 end)
 
@@ -120,16 +98,15 @@ end
 -- Auto Farm (Coyotes)
 spawn(function()
     while true do
-        randomizedWait(1, 3)
+        randomizedWait(1, 3)  -- Randomized wait to prevent predictable patterns
         if farming then
             local enemies = workspace:FindFirstChild("Enemies")
             if enemies then
                 for _, mob in pairs(enemies:GetChildren()) do
                     if mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") then
                         safeTeleport(mob.HumanoidRootPart.CFrame + Vector3.new(0,5,0))
-                        randomizedWait(0.2, 0.5)
+                        randomizedWait(0.2, 0.5)  -- Randomized delay to mimic human behavior
                         pcall(function() mob.Humanoid.Health = 0 end)
-                        log("Coyote defeated!")
                     end
                 end
             end
@@ -139,8 +116,7 @@ spawn(function()
             if #inv >= 10 then
                 local sellPos = CFrame.new(-214, 24, 145)  -- Update with your store coordinates
                 safeTeleport(sellPos)
-                randomizedWait(0.5, 1)
-                log("Items sold!")
+                randomizedWait(0.5, 1)  -- Random delay to mimic human-like action
             end
         end
     end
@@ -168,7 +144,8 @@ local function checkAndBuyAmmo()
         local buyPos = CFrame.new(-200, 24, 140) -- Update with your ammo store coordinates
         safeTeleport(buyPos)
         randomizedWait(1, 2)
-        log("Ammo purchased!")
+        -- Assuming there's a method to buy ammo, or modify this based on the actual game mechanics
+        -- buyAmmoMethod()
     end
 end
 
@@ -177,7 +154,8 @@ local function depositToBank()
     local bankPos = CFrame.new(-210, 24, 150) -- Update with your bank coordinates
     safeTeleport(bankPos)
     randomizedWait(1, 2)
-    log("Deposited to bank!")
+    -- Assuming deposit action can be triggered here
+    -- depositMethod()
 end
 
 -- Teleport to Train Heist
@@ -194,15 +172,15 @@ end
 local function isNearTrainHeist()
     local targetPos = findTrainHeist()
     local distance = (HRP.Position - targetPos.Position).magnitude
-    return distance < 10
+    return distance < 10  -- You can adjust this threshold
 end
 
 local function teleportToTrainHeist()
     if not isNearTrainHeist() then
         local trainHeistPos = findTrainHeist()
-        safeTeleport(trainHeistPos)
+        safeTeleport(trainHeistPos)  -- Teleports to the train heist position
     else
-        log("Already at the train heist!")
+        print("Already at the train heist!")
     end
 end
 
@@ -211,17 +189,19 @@ spawn(function()
     while true do
         randomizedWait(1, 3)
         if farming then
+            -- Check if near train heist, and teleport if not
             teleportToTrainHeist()
+
+            -- Auto-sell items when near the store
+            autoSellItems()
+
+            -- Check and buy ammo if needed
             checkAndBuyAmmo()
+
+            -- Deposit to bank if needed
             depositToBank()
         end
     end
 end)
 
--- Error Handling (Global PCall Wrapper)
-local function safeExecution(func)
-    local success, err = pcall(func)
-    if not success then
-        log("Error occurred: " .. err)
-    end
-end
+-- Add more features like screenshot blocking, etc. as needed
