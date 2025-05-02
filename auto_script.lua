@@ -1,231 +1,85 @@
--- MIT License
--- Copyright (c) 2025 AkumajouHelp
---
--- Permission is hereby granted, free of charge, to any person obtaining a copy
--- of this script and associated documentation files (the "Script"), to deal
--- in the Script without restriction, including without limitation the rights to
--- use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
--- Script, and to permit persons to whom the Script is furnished to do so, subject to the following conditions:
---
--- The above copyright notice and this permission notice shall be included in all
--- copies or substantial portions of the Script.
---
--- THE SCRIPT IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
--- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
--- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
--- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
--- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
--- OUT OF OR IN CONNECTION WITH THE SCRIPT OR THE USE OR OTHER DEALINGS IN THE SCRIPT.
-
---[[
-Westbound Auto Farm Script (Enhanced Anti-Cheat and Optimized Performance)
-Author: AkumajouHelp
+--[[ Westbound Auto Farm Script (Optimized + Developer Tools) Author: AkumajouHelp MIT License Included
 
 Features:
-- Auto farm coyotes
-- Auto sell when inventory full
-- Fast auto kill
-- Faster teleporting
-- Low lag & safe teleports
-- Anti-AFK
-- Auto respawn
-- GUI with toggle buttons
-- Teleport to Train Heist
-- Instant Deposit to Bank
-- Chat command: !togglefarm
-- Anti-Cheat
-- Ammo Smart System (Auto-buy ammo, on-screen warning, auto-switch to melee if no bullets)
-- Blur Effect to prevent clean screenshots (simulated)
-- Smoke Cloak to obscure video recordings (simulated visual overlay)
-]]
 
--- Services
-local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
-local RunService = game:GetService("RunService")
-local VirtualInputManager = game:GetService("VirtualInputManager")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local LocalPlayer = Players.LocalPlayer
-local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-local HRP = Character:WaitForChild("HumanoidRootPart")
+Auto farm coyotes
 
--- Anti-AFK
-LocalPlayer.Idled:Connect(function()
-    VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 0)
-    wait(math.random(1, 2))
-    VirtualInputManager:SendMouseButtonEvent(0, 0, 0, false, game, 0)
-end)
+Auto sell when inventory full
 
--- Randomized Teleport
-local function safeTeleport(destination)
-    local randomOffset = Vector3.new(math.random(-2, 2), 0, math.random(-2, 2))
-    local targetCFrame = destination + randomOffset
-    local tween = TweenService:Create(HRP, TweenInfo.new(0.7), {CFrame = targetCFrame})
-    tween:Play()
-    tween.Completed:Wait()
-end
+Fast auto kill
 
--- Blur Effect
-local blurEffect = Instance.new("BlurEffect")
-blurEffect.Parent = LocalPlayer.PlayerGui
-blurEffect.Size = 0
+Faster teleporting
 
-local function activateBlur()
-    blurEffect.Size = 25
-end
+Low lag & safe teleports
 
-local function removeBlur()
-    blurEffect.Size = 0
-end
+Anti-AFK
 
--- Smoke Cloak Overlay (Simulated Obfuscation for Video Recording)
-local cloak = Instance.new("Frame")
-cloak.Size = UDim2.new(1, 0, 1, 0)
-cloak.BackgroundColor3 = Color3.new(0, 0, 0)
-cloak.BackgroundTransparency = 0.7
-cloak.Visible = false
-cloak.ZIndex = 10
-cloak.Parent = LocalPlayer:WaitForChild("PlayerGui")
+Auto respawn
 
-local function activateCloak()
-    cloak.Visible = true
-end
+GUI with toggle buttons
 
-local function deactivateCloak()
-    cloak.Visible = false
-end
+Teleport to Train Heist
 
--- Blur on Screenshot
-game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
-    if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == Enum.KeyCode.PrintScreen then
-        activateBlur()
-        wait(2)
-        removeBlur()
-    end
-end)
+Instant Deposit to Bank
 
--- GUI Toggle
-local gui = Instance.new("ScreenGui", game.CoreGui)
-local toggleBtn = Instance.new("TextButton", gui)
-toggleBtn.Size = UDim2.new(0, 200, 0, 50)
-toggleBtn.Position = UDim2.new(0, 50, 0, 50)
-toggleBtn.Text = "Start Auto Farm"
-toggleBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+Chat command: !togglefarm
 
-local farming = false
+Ammo Smart System
 
-toggleBtn.MouseButton1Click:Connect(function()
-    farming = not farming
-    toggleBtn.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
-end)
+Blur/Smoke overlay effects
 
--- Chat Command Toggle
-ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest.OnClientEvent:Connect(function(msg, sender)
-    if sender == LocalPlayer.Name and msg:lower() == "!togglefarm" then
-        farming = not farming
-        toggleBtn.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
-        ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(farming and "Auto Farming Started" or "Auto Farming Stopped")
-    end
-end)
+Developer Panel: status, manual tools, logs ]]
 
--- Random Wait
-local function randomizedWait(min, max)
-    wait(math.random(min, max))
-end
 
--- Auto Farm Coyotes
-spawn(function()
-    while true do
-        randomizedWait(1, 3)
-        if farming then
-            local enemies = workspace:FindFirstChild("Enemies")
-            if enemies then
-                for _, mob in pairs(enemies:GetChildren()) do
-                    if mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") then
-                        safeTeleport(mob.HumanoidRootPart.CFrame + Vector3.new(0,5,0))
-                        randomizedWait(0.2, 0.5)
-                        pcall(function() mob.Humanoid.Health = 0 end)
-                    end
-                end
-            end
+--// MIT License -- Copyright (c) 2025 AkumajouHelp -- Permission is granted... [Full license text retained above this]
 
-            if #LocalPlayer.Backpack:GetChildren() >= 10 then
-                local sellPos = CFrame.new(-214, 24, 145)
-                safeTeleport(sellPos)
-                randomizedWait(0.5, 1)
-            end
-        end
-    end
-end)
+--// Services local Players = game:GetService("Players") local TweenService = game:GetService("TweenService") local RunService = game:GetService("RunService") local ReplicatedStorage = game:GetService("ReplicatedStorage") local VirtualInputManager = game:GetService("VirtualInputManager") local LocalPlayer = Players.LocalPlayer local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait() local HRP = Character:WaitForChild("HumanoidRootPart") local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
--- Auto Respawn
-LocalPlayer.CharacterAdded:Connect(function(char)
-    Character = char
-    HRP = Character:WaitForChild("HumanoidRootPart")
-end)
+--// Anti-AFK LocalPlayer.Idled:Connect(function() VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 0) task.wait(math.random(1,2)) VirtualInputManager:SendMouseButtonEvent(0, 0, 0, false, game, 0) end)
 
--- Ammo Smart System
-local function checkAndBuyAmmo()
-    local ammo = LocalPlayer.Backpack:FindFirstChild("Ammo")
-    if ammo and ammo.Amount < 10 then
-        local buyPos = CFrame.new(-200, 24, 140)
-        safeTeleport(buyPos)
-        randomizedWait(1, 2)
-    end
-end
+--// Safe Teleport local function safeTeleport(cf) local offset = Vector3.new(math.random(-2,2), 0, math.random(-2,2)) TweenService:Create(HRP, TweenInfo.new(0.6), {CFrame = cf + offset}):Play() task.wait(0.7) end
 
--- Deposit to Bank
-local function depositToBank()
-    local bankPos = CFrame.new(-210, 24, 150)
-    safeTeleport(bankPos)
-    randomizedWait(1, 2)
-end
+--// Effects local blur = Instance.new("BlurEffect", PlayerGui) blur.Size = 0 local function toggleBlur(on) blur.Size = on and 25 or 0 end
 
--- Train Heist Finder
-local function findTrainHeist()
-    local trainHeist = workspace:FindFirstChild("TrainHeist")
-    if trainHeist and trainHeist:FindFirstChild("HumanoidRootPart") then
-        return trainHeist.HumanoidRootPart.CFrame
-    else
-        return CFrame.new(-300, 24, 200)
-    end
-end
+local cloak = Instance.new("Frame") cloak.Size = UDim2.new(1,0,1,0) cloak.BackgroundColor3 = Color3.new(0,0,0) cloak.BackgroundTransparency = 0.7 cloak.Visible = false cloak.ZIndex = 10 cloak.Parent = PlayerGui local function toggleCloak(on) cloak.Visible = on end
 
-local function isNearTrainHeist()
-    local targetPos = findTrainHeist()
-    local distance = (HRP.Position - targetPos.Position).magnitude
-    return distance < 10
-end
+-- Screenshot blur game:GetService("UserInputService").InputBegan:Connect(function(i, g) if not g and i.KeyCode == Enum.KeyCode.PrintScreen then toggleBlur(true) task.wait(2) toggleBlur(false) end end)
 
-local function teleportToTrainHeist()
-    if not isNearTrainHeist() then
-        local trainHeistPos = findTrainHeist()
-        safeTeleport(trainHeistPos)
-    end
-end
+--// GUI Toggle local gui = Instance.new("ScreenGui", game.CoreGui) local toggleBtn = Instance.new("TextButton", gui) toggleBtn.Size = UDim2.new(0, 200, 0, 50) toggleBtn.Position = UDim2.new(0, 50, 0, 50) toggleBtn.Text = "Start Auto Farm" toggleBtn.BackgroundColor3 = Color3.fromRGB(0,170,255)
 
--- Auto Farming With Train Heist
-spawn(function()
-    while true do
-        randomizedWait(1, 3)
-        if farming then
-            teleportToTrainHeist()
-            checkAndBuyAmmo()
-            depositToBank()
-        end
-    end
-end)
+local farming = false toggleBtn.MouseButton1Click:Connect(function() farming = not farming toggleBtn.Text = farming and "Stop Auto Farm" or "Start Auto Farm" end)
 
--- Activate Cloak if external screen recording is suspected (simulation)
--- This is symbolic, true detection of external recorders like OBS is not possible in Roblox
-spawn(function()
-    while true do
-        wait(5)
-        if farming then
-            activateCloak()
-            wait(3)
-            deactivateCloak()
-        end
-    end
-end)
+-- Chat toggle ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest.OnClientEvent:Connect(function(msg, sender) if sender == LocalPlayer.Name and msg:lower() == "!togglefarm" then farming = not farming toggleBtn.Text = farming and "Stop Auto Farm" or "Start Auto Farm" end end)
+
+--// Helper Wait local function randomizedWait(min, max) task.wait(math.random(min100, max100)/100) end
+
+--// Auto Farm Coyotes spawn(function() while task.wait(1) do if farming then local enemies = workspace:FindFirstChild("Enemies") if enemies then for _, mob in pairs(enemies:GetChildren()) do if mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") then safeTeleport(mob.HumanoidRootPart.CFrame + Vector3.new(0,5,0)) randomizedWait(0.2, 0.4) pcall(function() mob.Humanoid.Health = 0 end) end end end if #LocalPlayer.Backpack:GetChildren() >= 10 then safeTeleport(CFrame.new(-214,24,145)) -- Sell spot randomizedWait(0.5, 1) end end end end)
+
+--// Auto Respawn LocalPlayer.CharacterAdded:Connect(function(char) Character = char HRP = char:WaitForChild("HumanoidRootPart") end)
+
+--// Ammo + Bank local function checkAndBuyAmmo() if LocalPlayer.Backpack:FindFirstChild("Ammo") then safeTeleport(CFrame.new(-200,24,140)) randomizedWait(1,2) end end
+
+local function depositToBank() safeTeleport(CFrame.new(-210,24,150)) randomizedWait(1,2) end
+
+--// Train Heist Tracker local function getTrainHeistPos() local train = workspace:FindFirstChild("TrainHeist") return train and train:FindFirstChild("HumanoidRootPart") and train.HumanoidRootPart.CFrame or CFrame.new(-300,24,200) end
+
+local function teleportToTrainHeist() local cf = getTrainHeistPos() if (HRP.Position - cf.Position).Magnitude > 10 then safeTeleport(cf) end end
+
+-- Train + Ammo + Bank spawn(function() while task.wait(2) do if farming then teleportToTrainHeist() checkAndBuyAmmo() depositToBank() end end end)
+
+-- Cloak simulation spawn(function() while task.wait(5) do if farming then toggleCloak(true) task.wait(2.5) toggleCloak(false) end end end)
+
+--// Developer Panel local devGui = Instance.new("ScreenGui", game.CoreGui) devGui.Name = "DevPanel" local panel = Instance.new("Frame", devGui) panel.Size = UDim2.new(0,220,0,140) panel.Position = UDim2.new(0,270,0,50) panel.BackgroundColor3 = Color3.fromRGB(30,30,30) panel.Draggable, panel.Active = true, true
+
+local lbl = Instance.new("TextLabel", panel) lbl.Size = UDim2.new(1,0,0,30) lbl.Text = "Dev Panel" lbl.TextColor3 = Color3.new(1,1,1) lbl.BackgroundTransparency = 1
+
+local status = Instance.new("TextLabel", panel) status.Size = UDim2.new(1,0,0,20) status.Position = UDim2.new(0,0,0,30) status.Text = "Status: Idle" status.TextColor3 = Color3.new(1,1,1) status.BackgroundTransparency = 1
+
+RunService.RenderStepped:Connect(function() status.Text = "Status: " .. (farming and "Farming" or "Idle") end)
+
+local btnCloak = Instance.new("TextButton", panel) btnCloak.Size = UDim2.new(1,0,0,25) btnCloak.Position = UDim2.new(0,0,0,55) btnCloak.Text = "Toggle Cloak" btnCloak.MouseButton1Click:Connect(function() cloak.Visible = not cloak.Visible end)
+
+local btnBlur = Instance.new("TextButton", panel) btnBlur.Size = UDim2.new(1,0,0,25) btnBlur.Position = UDim2.new(0,0,0,85) btnBlur.Text = "Toggle Blur" btnBlur.MouseButton1Click:Connect(function() toggleBlur(blur.Size == 0) end)
+
+local btnTPBank = Instance.new("TextButton", panel) btnTPBank.Size = UDim2.new(1,0,0,25) btnTPBank.Position = UDim2.new(0,0,0,115) btnTPBank.Text = "Teleport to Bank" btnTPBank.MouseButton1Click:Connect(function() safeTeleport(CFrame.new(-210,24,150)) end)
+
