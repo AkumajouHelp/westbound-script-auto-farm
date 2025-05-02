@@ -4,9 +4,8 @@
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this script and associated documentation files (the "Script"), to deal
 -- in the Script without restriction, including without limitation the rights to
--- use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
--- the Script, and to permit persons to whom the Script is furnished to do so,
--- subject to the following conditions:
+-- use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+-- Script, and to permit persons to whom the Script is furnished to do so, subject to the following conditions:
 --
 -- The above copyright notice and this permission notice shall be included in all
 -- copies or substantial portions of the Script.
@@ -16,15 +15,11 @@
 -- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 -- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 -- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
--- OUT OF OR IN CONNECTION WITH THE SCRIPT OR THE USE OR OTHER DEALINGS IN THE
--- SCRIPT.
+-- OUT OF OR IN CONNECTION WITH THE SCRIPT OR THE USE OR OTHER DEALINGS IN THE SCRIPT.
 
 --[[
 Westbound Auto Farm Script (Enhanced Anti-Cheat and Optimized Performance)
 Author: AkumajouHelp
-
-My Main Script Link Page:
-https://github.com/AkumajouHelp/westbound-script-auto-farm
 
 Features:
 - Auto farm coyotes
@@ -39,11 +34,7 @@ Features:
 - Instant Deposit to Bank
 - Chat command: !togglefarm
 - Anti Cheat
-- Ammo Smart System:
-
-1. Auto-buy ammo when low
-2. On-screen warning when out of ammo
-3. Auto-switch to melee if no bullets
+- Ammo Smart System (Auto-buy ammo, on-screen warning, auto-switch to melee if no bullets)
 ]]
 
 -- Function to load script from a URL
@@ -169,3 +160,42 @@ local function simulateMouseMove()
     VirtualInputManager:SendMouseMoveEvent(mousePos.X, mousePos.Y, true)
     VirtualInputManager:SendMouseMoveEvent(targetPos.X, targetPos.Y, false)
 end
+
+-- Ammo Smart System
+local function checkAndBuyAmmo()
+    local ammo = LocalPlayer.Backpack:FindFirstChild("Ammo")
+    if ammo and ammo.Amount < 10 then
+        -- Auto buy ammo from the store
+        local buyPos = CFrame.new(-200, 24, 140) -- adjust as necessary
+        safeTeleport(buyPos)
+        randomizedWait(1, 2)
+        -- Assuming there's a method to buy ammo, or modify this based on the actual game mechanics
+        -- buyAmmoMethod()
+    end
+end
+
+-- Instant Deposit to Bank
+local function depositToBank()
+    local bankPos = CFrame.new(-210, 24, 150) -- adjust as necessary
+    safeTeleport(bankPos)
+    randomizedWait(1, 2)
+    -- Assuming deposit action can be triggered here
+    -- depositMethod()
+end
+
+-- Teleport to Train Heist
+local function teleportToTrainHeist()
+    local trainHeistPos = CFrame.new(-300, 24, 200) -- adjust as necessary
+    safeTeleport(trainHeistPos)
+end
+
+-- Continuous checks for ammo and bank deposit
+spawn(function()
+    while true do
+        checkAndBuyAmmo()
+        depositToBank()
+        wait(10)  -- Wait before the next check
+    end
+end)
+
+-- Add any additional logic for features such as Anti-Cheat, specific actions, etc.
