@@ -33,7 +33,7 @@ Features:
 - Teleport to Train Heist
 - Instant Deposit to Bank
 - Chat command: !togglefarm
-- Anti Cheat
+- Anti-Cheat
 - Ammo Smart System (Auto-buy ammo, on-screen warning, auto-switch to melee if no bullets)
 ]]
 
@@ -112,6 +112,8 @@ game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageReque
     if sender == LocalPlayer.Name and msg:lower() == "!togglefarm" then
         farming = not farming
         toggleBtn.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
+        -- Chat notification when toggling farming state
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(farming and "Auto Farming Started" or "Auto Farming Stopped")
     end
 end)
 
