@@ -35,6 +35,7 @@ Features:
 - Chat command: !togglefarm
 - Anti-Cheat
 - Ammo Smart System (Auto-buy ammo, on-screen warning, auto-switch to melee if no bullets)
+- Blur Effect to prevent clean screenshots (simulated)
 ]]
 
 -- Services
@@ -64,6 +65,31 @@ local function safeTeleport(destination)
     tween:Play()
     tween.Completed:Wait()
 end
+
+-- Add Screen Blur Effect for Screenshot Prevention
+local blurEffect = Instance.new("BlurEffect")
+blurEffect.Parent = LocalPlayer.PlayerGui
+blurEffect.Size = 0  -- Start with no blur
+
+local function activateBlur()
+    blurEffect.Size = 25  -- You can adjust the intensity of the blur
+end
+
+local function removeBlur()
+    blurEffect.Size = 0
+end
+
+-- Function to activate the blur effect
+game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+
+    if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == Enum.KeyCode.PrintScreen then
+        -- Activate blur when the screenshot button is pressed
+        activateBlur()
+        wait(2)  -- Keep the blur effect for 2 seconds
+        removeBlur()
+    end
+end)
 
 -- GUI for Toggle Button
 local gui = Instance.new("ScreenGui", game.CoreGui)
@@ -127,14 +153,6 @@ LocalPlayer.CharacterAdded:Connect(function(char)
     Character = char
     HRP = Character:WaitForChild("HumanoidRootPart")
 end)
-
--- Function to Simulate More Human-Like Input
-local function simulateMouseMove()
-    local mousePos = game:GetService("Workspace").CurrentCamera.CFrame.Position
-    local targetPos = mousePos + Vector3.new(math.random(-1, 1), 0, math.random(-1, 1))
-    VirtualInputManager:SendMouseMoveEvent(mousePos.X, mousePos.Y, true)
-    VirtualInputManager:SendMouseMoveEvent(targetPos.X, targetPos.Y, false)
-end
 
 -- Ammo Smart System
 local function checkAndBuyAmmo()
@@ -203,5 +221,3 @@ spawn(function()
         end
     end
 end)
-
--- Add more features like screenshot blocking, etc. as needed
