@@ -1,3 +1,39 @@
+--// Fallback Script Loading (GitHub -> Pastebin)
+local mainScriptURL = "https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/refs/heads/main/auto_script.lua"
+local backupScriptURL = "https://pastebin.com/raw/5TU8iPKE"
+
+local function loadScript(url)
+    local success, result = pcall(function()
+        return game:GetService("HttpService"):GetAsync(url)
+    end)
+
+    if success then
+        return result
+    else
+        warn("Failed to load script from " .. url)
+        return nil
+    end
+end
+
+local function loadScriptWithFallback()
+    local scriptContent = loadScript(mainScriptURL)
+    
+    if not scriptContent then
+        print("Loading from backup...")
+        scriptContent = loadScript(backupScriptURL)
+    end
+    
+    if scriptContent then
+        -- Execute the loaded script
+        loadstring(scriptContent)()
+    else
+        error("Failed to load the script from both GitHub and Pastebin!")
+    end
+end
+
+-- Attempt to load the script
+loadScriptWithFallback()
+
 --[[ Westbound Auto Farm Script (Optimized + Developer Tools) Author: AkumajouHelp MIT License Included
 
 Features:
@@ -29,8 +65,6 @@ Ammo Smart System
 Blur/Smoke overlay effects
 
 Developer Panel: status, manual tools, logs ]]
-
-
 --// MIT License -- Copyright (c) 2025 AkumajouHelp -- Permission is granted... [Full license text retained above this]
 
 --// Services local Players = game:GetService("Players") local TweenService = game:GetService("TweenService") local RunService = game:GetService("RunService") local ReplicatedStorage = game:GetService("ReplicatedStorage") local VirtualInputManager = game:GetService("VirtualInputManager") local LocalPlayer = Players.LocalPlayer local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait() local HRP = Character:WaitForChild("HumanoidRootPart") local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
@@ -82,4 +116,3 @@ local btnCloak = Instance.new("TextButton", panel) btnCloak.Size = UDim2.new(1,0
 local btnBlur = Instance.new("TextButton", panel) btnBlur.Size = UDim2.new(1,0,0,25) btnBlur.Position = UDim2.new(0,0,0,85) btnBlur.Text = "Toggle Blur" btnBlur.MouseButton1Click:Connect(function() toggleBlur(blur.Size == 0) end)
 
 local btnTPBank = Instance.new("TextButton", panel) btnTPBank.Size = UDim2.new(1,0,0,25) btnTPBank.Position = UDim2.new(0,0,0,115) btnTPBank.Text = "Teleport to Bank" btnTPBank.MouseButton1Click:Connect(function() safeTeleport(CFrame.new(-210,24,150)) end)
-
