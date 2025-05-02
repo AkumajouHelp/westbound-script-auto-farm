@@ -37,39 +37,12 @@ Features:
 - Ammo Smart System (Auto-buy ammo, on-screen warning, auto-switch to melee if no bullets)
 ]]
 
--- Function to load script from a URL
-local function loadScript(url)
-    local success, response = pcall(function()
-        return game:HttpGet(url)
-    end)
-
-    if success then
-        return response
-    else
-        return nil
-    end
-end
-
--- First try Pastebin
-local scriptContent = loadScript("https://pastebin.com/raw/5TU8iPKE")
-
--- If Pastebin fails, try GitHub
-if not scriptContent then
-    scriptContent = loadScript("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/refs/heads/main/auto_script.lua")
-end
-
--- If a script was successfully loaded, execute it
-if scriptContent then
-    loadstring(scriptContent)()
-else
-    warn("Failed to load the script from both sources.")
-end
-
 -- Services
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local HRP = Character:WaitForChild("HumanoidRootPart")
@@ -108,12 +81,12 @@ toggleBtn.MouseButton1Click:Connect(function()
 end)
 
 -- Chat Command Toggle
-game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest.OnClientEvent:Connect(function(msg, sender)
+ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest.OnClientEvent:Connect(function(msg, sender)
     if sender == LocalPlayer.Name and msg:lower() == "!togglefarm" then
         farming = not farming
         toggleBtn.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
         -- Chat notification when toggling farming state
-        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(farming and "Auto Farming Started" or "Auto Farming Stopped")
+        ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(farming and "Auto Farming Started" or "Auto Farming Stopped")
     end
 end)
 
