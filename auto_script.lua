@@ -30,7 +30,7 @@ Features:
 - Anti-AFK
 - Auto respawn
 - GUI with toggle buttons
-- Teleport to Train Heist
+- Teleport to Train Heist (auto detection)
 - Instant Deposit to Bank
 - Chat command: !togglefarm
 - Anti-Cheat
@@ -55,14 +55,26 @@ LocalPlayer.Idled:Connect(function()
     VirtualInputManager:SendMouseButtonEvent(0, 0, 0, false, game, 0)
 end)
 
--- Randomized Teleport Function
+-- Randomized Teleport Function with Safety Checks
 local function safeTeleport(destination)
     -- Adding slight randomization to teleportation to avoid detection
     local randomOffset = Vector3.new(math.random(-2, 2), 0, math.random(-2, 2))
     local targetCFrame = destination + randomOffset
-    local tween = TweenService:Create(HRP, TweenInfo.new(0.7), {CFrame = targetCFrame})
-    tween:Play()
-    tween.Completed:Wait()
+
+    -- Check if teleport destination is valid (not inside walls)
+    local success, errorMsg = pcall(function()
+        local targetPosition = targetCFrame.Position
+        local ray = workspace:Raycast(targetPosition, Vector3.new(0, -10, 0))  -- Check if there's ground beneath
+        return ray and ray.Instance
+    end)
+
+    if success then
+        local tween = TweenService:Create(HRP, TweenInfo.new(0.7), {CFrame = targetCFrame})
+        tween:Play()
+        tween.Completed:Wait()
+    else
+        warn("Invalid teleport location!")
+    end
 end
 
 -- GUI for Toggle Button
@@ -128,14 +140,6 @@ LocalPlayer.CharacterAdded:Connect(function(char)
     HRP = Character:WaitForChild("HumanoidRootPart")
 end)
 
--- Function to Simulate More Human-Like Input
-local function simulateMouseMove()
-    local mousePos = game:GetService("Workspace").CurrentCamera.CFrame.Position
-    local targetPos = mousePos + Vector3.new(math.random(-1, 1), 0, math.random(-1, 1))
-    VirtualInputManager:SendMouseMoveEvent(mousePos.X, mousePos.Y, true)
-    VirtualInputManager:SendMouseMoveEvent(targetPos.X, targetPos.Y, false)
-end
-
 -- Ammo Smart System
 local function checkAndBuyAmmo()
     local ammo = LocalPlayer.Backpack:FindFirstChild("Ammo")
@@ -158,19 +162,51 @@ local function depositToBank()
     -- depositMethod()
 end
 
--- Teleport to Train Heist
-local function teleportToTrainHeist()
-    local trainHeistPos = CFrame.new(-300, 24, 200) -- Update with your train heist coordinates
-    safeTeleport(trainHeistPos)
+-- Train Heist Detection and Auto Teleport
+local function detectTrainHeist()
+    local trainHeist = workspace:FindFirstChild("TrainHeist")
+    if trainHeist then
+        return trainHeist:FindFirstChild("HumanoidRootPart")
+    end
+    return nil
 end
 
--- Continuous checks for ammo and bank deposit
+local function teleportToTrainHeist()
+    local train = detectTrainHeist()
+    if train then
+        safeTeleport(train.CFrame)
+        print("Teleporting to Train Heist!")
+    else
+        print("Train Heist not found!")
+    end
+end
+
+-- Auto-farming with train heist check
 spawn(function()
     while true do
-        checkAndBuyAmmo()
-        depositToBank()
-        wait(10)  -- Wait before the next check
+        randomizedWait(1, 3)
+        if farming then
+            -- Check if near train heist, and teleport if not
+            teleportToTrainHeist()
+
+            -- Auto-sell items when near the store
+            autoSellItems()
+
+            -- Check and buy ammo if needed
+            checkAndBuyAmmo()
+
+            -- Deposit to bank if needed
+            depositToBank()
+        end
     end
 end)
 
--- Add any additional logic for features such as Anti-Cheat, specific actions, etc.
+-- Auto Sell Items (General Store)
+local function autoSellItems()
+    local inv = LocalPlayer.Backpack:GetChildren()
+    if #inv >= 10 then
+        local sellPos = CFrame.new(-214, 24, 145)  -- Store position
+        safeTeleport(sellPos)
+        randomizedWait(0.5, 1)
+    end
+end
