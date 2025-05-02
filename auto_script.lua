@@ -23,9 +23,6 @@
 Westbound Auto Farm Script (Enhanced Anti-Cheat and Optimized Performance)
 Author: AkumajouHelp
 
-My Main Script Link Page:
-https://github.com/AkumajouHelp/westbound-script-auto-farm
-
 Features:
 - Auto farm coyotes
 - Auto sell when inventory full
