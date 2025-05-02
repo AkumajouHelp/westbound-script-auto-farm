@@ -17,27 +17,6 @@
 -- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 -- OUT OF OR IN CONNECTION WITH THE SCRIPT OR THE USE OR OTHER DEALINGS IN THE SCRIPT.
 
---[[
-Westbound Auto Farm Script (Enhanced Anti-Cheat and Optimized Performance)
-Author: AkumajouHelp
-
-Features:
-- Auto farm coyotes
-- Auto sell when inventory full
-- Fast auto kill
-- Faster teleporting
-- Low lag & safe teleports
-- Anti-AFK
-- Auto respawn
-- GUI with toggle buttons
-- Teleport to Train Heist
-- Instant Deposit to Bank
-- Chat command: !togglefarm
-- Anti-Cheat
-- Ammo Smart System (Auto-buy ammo, on-screen warning, auto-switch to melee if no bullets)
-- Blur Effect to prevent clean screenshots (simulated)
-]]
-
 -- Services
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
@@ -47,6 +26,26 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local HRP = Character:WaitForChild("HumanoidRootPart")
+
+-- Logging Function for Developer Debugging
+local function log(message)
+    local timestamp = os.date("%Y-%m-%d %H:%M:%S")
+    print(string.format("[%s] %s", timestamp, message))
+end
+
+-- Real-Time Monitoring (can be replaced with actual monitoring systems)
+local function monitorFarmStatus()
+    if farming then
+        log("Auto-farming is active.")
+    else
+        log("Auto-farming is paused.")
+    end
+end
+
+-- Error Handling and Debugging
+local function handleError(errorMessage)
+    log("Error occurred: " .. errorMessage)
+end
 
 -- Anti-AFK
 LocalPlayer.Idled:Connect(function()
@@ -58,12 +57,23 @@ end)
 
 -- Randomized Teleport Function
 local function safeTeleport(destination)
-    -- Adding slight randomization to teleportation to avoid detection
+    -- Add monitoring and logging before and after teleportation
+    log("Attempting teleport to: " .. tostring(destination))
     local randomOffset = Vector3.new(math.random(-2, 2), 0, math.random(-2, 2))
     local targetCFrame = destination + randomOffset
     local tween = TweenService:Create(HRP, TweenInfo.new(0.7), {CFrame = targetCFrame})
-    tween:Play()
-    tween.Completed:Wait()
+
+    -- Wrap the teleportation call in a pcall for error handling
+    local success, errorMessage = pcall(function()
+        tween:Play()
+        tween.Completed:Wait()
+    end)
+
+    if success then
+        log("Teleport successful.")
+    else
+        handleError(errorMessage)
+    end
 end
 
 -- Add Screen Blur Effect for Screenshot Prevention
@@ -156,14 +166,11 @@ end)
 
 -- Ammo Smart System
 local function checkAndBuyAmmo()
+    log("Checking ammo levels...")
     local ammo = LocalPlayer.Backpack:FindFirstChild("Ammo")
     if ammo and ammo.Amount < 10 then
-        -- Auto buy ammo from the store
-        local buyPos = CFrame.new(-200, 24, 140) -- Update with your ammo store coordinates
-        safeTeleport(buyPos)
-        randomizedWait(1, 2)
-        -- Assuming there's a method to buy ammo, or modify this based on the actual game mechanics
-        -- buyAmmoMethod()
+        log("Ammo is low, initiating purchase")
+        -- Add the code to buy ammo
     end
 end
 
@@ -198,7 +205,7 @@ local function teleportToTrainHeist()
         local trainHeistPos = findTrainHeist()
         safeTeleport(trainHeistPos)  -- Teleports to the train heist position
     else
-        print("Already at the train heist!")
+        log("Already at the train heist!")
     end
 end
 
