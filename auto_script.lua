@@ -141,7 +141,7 @@ spawn(function()
             -- Auto Sell (General Store)
             local inv = LocalPlayer.Backpack:GetChildren()
             if #inv >= 10 then
-                local sellPos = CFrame.new(-214, 24, 145)
+                local sellPos = CFrame.new(-214, 24, 145)  -- Update with your store coordinates
                 safeTeleport(sellPos)
                 randomizedWait(0.5, 1)  -- Random delay to mimic human-like action
             end
@@ -168,7 +168,7 @@ local function checkAndBuyAmmo()
     local ammo = LocalPlayer.Backpack:FindFirstChild("Ammo")
     if ammo and ammo.Amount < 10 then
         -- Auto buy ammo from the store
-        local buyPos = CFrame.new(-200, 24, 140) -- adjust as necessary
+        local buyPos = CFrame.new(-200, 24, 140) -- Update with your ammo store coordinates
         safeTeleport(buyPos)
         randomizedWait(1, 2)
         -- Assuming there's a method to buy ammo, or modify this based on the actual game mechanics
@@ -178,7 +178,7 @@ end
 
 -- Instant Deposit to Bank
 local function depositToBank()
-    local bankPos = CFrame.new(-210, 24, 150) -- adjust as necessary
+    local bankPos = CFrame.new(-210, 24, 150) -- Update with your bank coordinates
     safeTeleport(bankPos)
     randomizedWait(1, 2)
     -- Assuming deposit action can be triggered here
@@ -187,7 +187,7 @@ end
 
 -- Teleport to Train Heist
 local function teleportToTrainHeist()
-    local trainHeistPos = CFrame.new(-300, 24, 200) -- adjust as necessary
+    local trainHeistPos = CFrame.new(-300, 24, 200) -- Update with your train heist coordinates
     safeTeleport(trainHeistPos)
 end
 
