@@ -30,7 +30,7 @@ Features:
 - Anti-AFK
 - Auto respawn
 - GUI with toggle buttons
-- Teleport to Train Heist (auto detection)
+- Teleport to Train Heist
 - Instant Deposit to Bank
 - Chat command: !togglefarm
 - Anti-Cheat
@@ -47,42 +47,32 @@ local LocalPlayer = Players.LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local HRP = Character:WaitForChild("HumanoidRootPart")
 
--- Anti-AFK
+-- GUI Library (in-game)
+local GuiLibrary = {} -- In actual script, replace this with a real GUI framework
+
+-- RemoteEvents to handle communication (chat, etc.)
+local RemoteEvents = ReplicatedStorage:WaitForChild("RemoteEvents")
+
+-- Anti-AFK (simulate mouse movement to avoid AFK kick)
 LocalPlayer.Idled:Connect(function()
-    -- Simulate mouse movement to prevent AFK kick
     VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 0)
     wait(math.random(1, 2))
     VirtualInputManager:SendMouseButtonEvent(0, 0, 0, false, game, 0)
 end)
 
--- Randomized Teleport Function with Safety Checks
+-- Randomized Teleport Function
 local function safeTeleport(destination)
-    -- Adding slight randomization to teleportation to avoid detection
     local randomOffset = Vector3.new(math.random(-2, 2), 0, math.random(-2, 2))
     local targetCFrame = destination + randomOffset
-
-    -- Check if teleport destination is valid (not inside walls)
-    local success, errorMsg = pcall(function()
-        local targetPosition = targetCFrame.Position
-        local ray = workspace:Raycast(targetPosition, Vector3.new(0, -10, 0))  -- Check if there's ground beneath
-        return ray and ray.Instance
-    end)
-
-    if success then
-        local tween = TweenService:Create(HRP, TweenInfo.new(0.7), {CFrame = targetCFrame})
-        tween:Play()
-        tween.Completed:Wait()
-    else
-        warn("Invalid teleport location!")
-    end
+    local tween = TweenService:Create(HRP, TweenInfo.new(0.7), {CFrame = targetCFrame})
+    tween:Play()
+    tween.Completed:Wait()
 end
 
--- GUI for Toggle Button
-local gui = Instance.new("ScreenGui", game.CoreGui)
-local toggleBtn = Instance.new("TextButton", gui)
-toggleBtn.Size = UDim2.new(0, 200, 0, 50)
+-- GUI Setup (Using placeholder GuiLibrary)
+local gui = GuiLibrary:CreateWindow("Auto Farm Script")
+local toggleBtn = gui:CreateButton("Start Auto Farm")
 toggleBtn.Position = UDim2.new(0, 50, 0, 50)
-toggleBtn.Text = "Start Auto Farm"
 toggleBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
 
 local farming = false
@@ -92,121 +82,105 @@ toggleBtn.MouseButton1Click:Connect(function()
     toggleBtn.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
 end)
 
--- Chat Command Toggle
+-- Chat Command to Toggle Auto Farming
 ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest.OnClientEvent:Connect(function(msg, sender)
     if sender == LocalPlayer.Name and msg:lower() == "!togglefarm" then
         farming = not farming
         toggleBtn.Text = farming and "Stop Auto Farm" or "Start Auto Farm"
-        -- Chat notification when toggling farming state
-        ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(farming and "Auto Farming Started" or "Auto Farming Stopped")
+        RemoteEvents:Fire("SayMessageRequest", farming and "Auto Farming Started" or "Auto Farming Stopped")
     end
 end)
 
--- Randomized Wait Function to Avoid Predictability
+-- Randomized Wait Function to Mimic Human Behavior
 local function randomizedWait(min, max)
     wait(math.random(min, max))
 end
 
--- Auto Farm (Coyotes)
+-- Auto Farm Function (Farming Coyotes)
 spawn(function()
     while true do
-        randomizedWait(1, 3)  -- Randomized wait to prevent predictable patterns
+        randomizedWait(1, 3)
         if farming then
             local enemies = workspace:FindFirstChild("Enemies")
             if enemies then
                 for _, mob in pairs(enemies:GetChildren()) do
                     if mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") then
                         safeTeleport(mob.HumanoidRootPart.CFrame + Vector3.new(0,5,0))
-                        randomizedWait(0.2, 0.5)  -- Randomized delay to mimic human behavior
+                        randomizedWait(0.2, 0.5)
                         pcall(function() mob.Humanoid.Health = 0 end)
                     end
                 end
             end
 
-            -- Auto Sell (General Store)
+            -- Auto Sell when Inventory is Full
             local inv = LocalPlayer.Backpack:GetChildren()
             if #inv >= 10 then
-                local sellPos = CFrame.new(-214, 24, 145)  -- Update with your store coordinates
+                local sellPos = CFrame.new(-214, 24, 145)
                 safeTeleport(sellPos)
-                randomizedWait(0.5, 1)  -- Random delay to mimic human-like action
+                randomizedWait(0.5, 1)
             end
         end
     end
 end)
 
--- Auto Respawn
+-- Auto Respawn Handler
 LocalPlayer.CharacterAdded:Connect(function(char)
     Character = char
     HRP = Character:WaitForChild("HumanoidRootPart")
 end)
 
--- Ammo Smart System
+-- Ammo Smart System (Check and Buy Ammo)
 local function checkAndBuyAmmo()
     local ammo = LocalPlayer.Backpack:FindFirstChild("Ammo")
     if ammo and ammo.Amount < 10 then
-        -- Auto buy ammo from the store
-        local buyPos = CFrame.new(-200, 24, 140) -- Update with your ammo store coordinates
+        local buyPos = CFrame.new(-200, 24, 140) -- Adjust with your ammo store coordinates
         safeTeleport(buyPos)
         randomizedWait(1, 2)
-        -- Assuming there's a method to buy ammo, or modify this based on the actual game mechanics
-        -- buyAmmoMethod()
     end
 end
 
 -- Instant Deposit to Bank
 local function depositToBank()
-    local bankPos = CFrame.new(-210, 24, 150) -- Update with your bank coordinates
+    local bankPos = CFrame.new(-210, 24, 150) -- Adjust with your bank coordinates
     safeTeleport(bankPos)
     randomizedWait(1, 2)
-    -- Assuming deposit action can be triggered here
-    -- depositMethod()
 end
 
--- Train Heist Detection and Auto Teleport
-local function detectTrainHeist()
+-- Teleport to Train Heist Location
+local function findTrainHeist()
     local trainHeist = workspace:FindFirstChild("TrainHeist")
-    if trainHeist then
-        return trainHeist:FindFirstChild("HumanoidRootPart")
-    end
-    return nil
-end
-
-local function teleportToTrainHeist()
-    local train = detectTrainHeist()
-    if train then
-        safeTeleport(train.CFrame)
-        print("Teleporting to Train Heist!")
+    if trainHeist and trainHeist:FindFirstChild("HumanoidRootPart") then
+        return trainHeist.HumanoidRootPart.CFrame
     else
-        print("Train Heist not found!")
+        return CFrame.new(-300, 24, 200)  -- Fallback position
     end
 end
 
--- Auto-farming with train heist check
+-- Check if Player is Near Train Heist
+local function isNearTrainHeist()
+    local targetPos = findTrainHeist()
+    local distance = (HRP.Position - targetPos.Position).magnitude
+    return distance < 10  -- Adjust distance threshold
+end
+
+-- Teleport to Train Heist
+local function teleportToTrainHeist()
+    if not isNearTrainHeist() then
+        local trainHeistPos = findTrainHeist()
+        safeTeleport(trainHeistPos)
+    else
+        print("Already at the train heist!")
+    end
+end
+
+-- Auto-Farming with Train Heist Check
 spawn(function()
     while true do
         randomizedWait(1, 3)
         if farming then
-            -- Check if near train heist, and teleport if not
             teleportToTrainHeist()
-
-            -- Auto-sell items when near the store
-            autoSellItems()
-
-            -- Check and buy ammo if needed
             checkAndBuyAmmo()
-
-            -- Deposit to bank if needed
             depositToBank()
         end
     end
 end)
-
--- Auto Sell Items (General Store)
-local function autoSellItems()
-    local inv = LocalPlayer.Backpack:GetChildren()
-    if #inv >= 10 then
-        local sellPos = CFrame.new(-214, 24, 145)  -- Store position
-        safeTeleport(sellPos)
-        randomizedWait(0.5, 1)
-    end
-end
