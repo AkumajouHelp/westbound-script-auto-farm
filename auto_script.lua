@@ -32,7 +32,7 @@ end)
 
 --// Utility
 local function safeTeleport(cf)
-    local offset = Vector3.new(math.random(-2,2), 0, math.random(-2,2))
+    local offset = Vector3.new(math.random(-2, 2), 0, math.random(-2, 2))
     TweenService:Create(HRP, TweenInfo.new(0.6), {CFrame = cf + offset}):Play()
     task.wait(0.7)
 end
@@ -47,8 +47,8 @@ blur.Size = 0
 local function toggleBlur(on) blur.Size = on and 25 or 0 end
 
 local cloak = Instance.new("Frame", PlayerGui)
-cloak.Size = UDim2.new(1,0,1,0)
-cloak.BackgroundColor3 = Color3.new(0,0,0)
+cloak.Size = UDim2.new(1, 0, 1, 0)
+cloak.BackgroundColor3 = Color3.new(0, 0, 0)
 cloak.BackgroundTransparency = 0.7
 cloak.Visible = false
 cloak.ZIndex = 10
@@ -66,7 +66,7 @@ end)
 local gui = Instance.new("ScreenGui", game.CoreGui)
 local toggleBtn = Instance.new("TextButton", gui)
 toggleBtn.Size, toggleBtn.Position = UDim2.new(0, 200, 0, 50), UDim2.new(0, 50, 0, 50)
-toggleBtn.Text, toggleBtn.BackgroundColor3 = "Start Auto Farm", Color3.fromRGB(0,170,255)
+toggleBtn.Text, toggleBtn.BackgroundColor3 = "Start Auto Farm", Color3.fromRGB(0, 170, 255)
 
 local farming = false
 toggleBtn.MouseButton1Click:Connect(function()
@@ -129,7 +129,7 @@ spawn(function()
                 end
             end
             if #LocalPlayer.Backpack:GetChildren() >= 10 then
-                safeTeleport(CFrame.new(-214,24,145)) -- Sell location
+                safeTeleport(CFrame.new(-214, 24, 145)) -- Sell location
                 randomizedWait(0.5, 1)
             end
         end
@@ -139,23 +139,23 @@ end)
 --// Bank & Ammo & Train
 local function checkAndBuyAmmo()
     if LocalPlayer.Backpack:FindFirstChild("Ammo") then
-        safeTeleport(CFrame.new(-200,24,140)) -- Ammo Shop
-        randomizedWait(1,2)
+        safeTeleport(CFrame.new(-200, 24, 140)) -- Ammo Shop
+        randomizedWait(1, 2)
     end
 end
 
 local function depositToBank()
-    safeTeleport(CFrame.new(-210,24,150))
-    randomizedWait(1,2)
+    safeTeleport(CFrame.new(-210, 24, 150))
+    randomizedWait(1, 2)
 end
 
 local function getTrainHeistPos()
     local train = workspace:FindFirstChild("TrainHeist")
     if train and train:FindFirstChild("HumanoidRootPart") then
-        if not train:FindFirstChild("ESP") then addESP(train, Color3.new(0,1,0)) end
+        if not train:FindFirstChild("ESP") then addESP(train, Color3.new(0, 1, 0)) end
         return train.HumanoidRootPart.CFrame
     end
-    return CFrame.new(-300,24,200)
+    return CFrame.new(-300, 24, 200)
 end
 
 local function teleportToTrainHeist()
@@ -190,20 +190,20 @@ end)
 local devGui = Instance.new("ScreenGui", game.CoreGui)
 devGui.Name = "DevPanel"
 local panel = Instance.new("Frame", devGui)
-panel.Size, panel.Position = UDim2.new(0,220,0,140), UDim2.new(0,270,0,50)
-panel.BackgroundColor3 = Color3.fromRGB(30,30,30)
+panel.Size, panel.Position = UDim2.new(0, 220, 0, 140), UDim2.new(0, 270, 0, 50)
+panel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 panel.Active, panel.Draggable = true, true
 
 local lbl = Instance.new("TextLabel", panel)
-lbl.Size = UDim2.new(1,0,0,30)
+lbl.Size = UDim2.new(1, 0, 0, 30)
 lbl.Text = "Dev Panel"
-lbl.TextColor3 = Color3.new(1,1,1)
+lbl.TextColor3 = Color3.new(1, 1, 1)
 lbl.BackgroundTransparency = 1
 
 local status = Instance.new("TextLabel", panel)
-status.Size = UDim2.new(1,0,0,20)
-status.Position = UDim2.new(0,0,0,30)
-status.TextColor3 = Color3.new(1,1,1)
+status.Size = UDim2.new(1, 0, 0, 20)
+status.Position = UDim2.new(0, 0, 0, 30)
+status.TextColor3 = Color3.new(1, 1, 1)
 status.BackgroundTransparency = 1
 
 RunService.RenderStepped:Connect(function()
@@ -211,16 +211,4 @@ RunService.RenderStepped:Connect(function()
 end)
 
 local btnCloak = Instance.new("TextButton", panel)
-btnCloak.Size, btnCloak.Position = UDim2.new(1,0,0,25), UDim2.new(0,0,0,55)
-btnCloak.Text = "Toggle Cloak"
-btnCloak.MouseButton1Click:Connect(function() toggleCloak(not cloak.Visible) end)
-
-local btnBlur = Instance.new("TextButton", panel)
-btnBlur.Size, btnBlur.Position = UDim2.new(1,0,0,25), UDim2.new(0,0,0,85)
-btnBlur.Text = "Toggle Blur"
-btnBlur.MouseButton1Click:Connect(function() toggleBlur(blur.Size == 0) end)
-
-local btnTPBank = Instance.new("TextButton", panel)
-btnTPBank.Size, btnTPBank.Position = UDim2.new(1,0,0,25), UDim2.new(0,0,0,115)
-btnTPBank.Text = "Teleport to Bank"
-btnTPBank.MouseButton1Click:Connect(function() safeTeleport(CFrame.new(-210,24,150)) end)
+btnCloak.Size, btn
