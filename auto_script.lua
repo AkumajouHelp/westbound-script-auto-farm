@@ -19,10 +19,10 @@ local function executeScript()
             loadstring(content)()
         end)
         if not success then
-            error("Error executing embedded script: " .. err)
+            warn("Error executing embedded script: " .. err)
         end
     else
-        error("Failed to load the embedded script!")
+        warn("Failed to load the embedded script!")
     end
 end
 
