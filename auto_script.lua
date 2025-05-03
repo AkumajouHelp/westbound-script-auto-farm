@@ -35,6 +35,7 @@ local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local UserInputService = game:GetService("UserInputService")
+local Lighting = game:GetService("Lighting")
 local LocalPlayer = Players.LocalPlayer
 
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
@@ -56,6 +57,16 @@ LocalPlayer.Idled:Connect(function()
     VirtualInputManager:SendMouseButtonEvent(0, 0, 0, false, game, 0)
 end)
 
+--// Initialize Blur Effect
+local blur = Instance.new("BlurEffect", Lighting)
+blur.Size = 0 -- Start with no blur
+
+--// Initialize Smoke Effect
+local smoke = Instance.new("Smoke", HRP)
+smoke.Enabled = false
+smoke.Opacity = 0.5 -- Adjust visibility
+smoke.Size = 10 -- Adjust the size of the smoke effect
+
 --// Utility Functions
 local function safeTeleport(cf)
     local offset = Vector3.new(math.random(-2, 2), 0, math.random(-2, 2))
@@ -65,6 +76,20 @@ end
 
 local function randomizedWait(min, max)
     task.wait(math.random(min * 100, max * 100) / 100)
+end
+
+--// Blur Functionality
+local function toggleBlur(enable)
+    if enable then
+        blur.Size = 10 -- Adjust blur intensity as needed
+    else
+        blur.Size = 0 -- Disable blur
+    end
+end
+
+--// Smoke Functionality
+local function toggleSmoke(enable)
+    smoke.Enabled = enable
 end
 
 --// ESP Function with Cleanup
@@ -88,82 +113,6 @@ local function addESP(obj, color)
         end
     end)
 end
-
---// Equip Best Weapon
-local function autoEquip()
-    local best = nil
-    for _, tool in pairs(LocalPlayer.Backpack:GetChildren()) do
-        if tool:IsA("Tool") and (not best or tool.Name:lower():find("rifle") or tool.Name:lower():find("shotgun")) then
-            best = tool
-        end
-    end
-    if best then best.Parent = Character end
-end
-
---// Auto Farm Coyotes
-spawn(function()
-    while task.wait(2) do
-        if farming then
-            local enemies = workspace:FindFirstChild("Enemies")
-            if enemies then
-                for _, mob in pairs(enemies:GetChildren()) do
-                    if mob.Name == "Coyote" and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 then
-                        addESP(mob, Color3.new(1, 0, 0))
-                        safeTeleport(mob.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0))
-                        autoEquip()
-                        for i = 1, 5 do
-                            pcall(function() mob.Humanoid:TakeDamage(25) end)
-                            task.wait(0.1)
-                        end
-                    end
-                end
-            end
-            if #LocalPlayer.Backpack:GetChildren() >= 10 then
-                safeTeleport(CONFIG.SELL_LOCATION)
-                randomizedWait(0.5, 1)
-            end
-        end
-    end
-end)
-
---// Bank, Ammo & Train
-local function checkAndBuyAmmo()
-    if not LocalPlayer.Backpack:FindFirstChild("Ammo") then
-        safeTeleport(CONFIG.AMMO_SHOP_LOCATION)
-        randomizedWait(1, 2)
-    end
-end
-
-local function depositToBank()
-    safeTeleport(CONFIG.BANK_LOCATION)
-    randomizedWait(1, 2)
-end
-
-local function getTrainHeistPos()
-    local train = workspace:FindFirstChild("TrainHeist")
-    if train and train:FindFirstChild("HumanoidRootPart") then
-        addESP(train, Color3.new(0, 1, 0))
-        return train.HumanoidRootPart.CFrame
-    end
-    return CONFIG.DEFAULT_TRAIN_HEIST_LOCATION
-end
-
-local function teleportToTrainHeist()
-    local cf = getTrainHeistPos()
-    if (HRP.Position - cf.Position).Magnitude > 10 then
-        safeTeleport(cf)
-    end
-end
-
-spawn(function()
-    while task.wait(2) do
-        if farming then
-            teleportToTrainHeist()
-            checkAndBuyAmmo()
-            depositToBank()
-        end
-    end
-end)
 
 --// Developer Panel
 local devGui = Instance.new("ScreenGui", game.CoreGui)
@@ -195,11 +144,17 @@ btnCloak.Text = "Toggle Cloak"
 btnCloak.MouseButton1Click:Connect(function() toggleCloak(not cloak.Visible) end)
 
 local btnBlur = Instance.new("TextButton", panel)
-btnBlur.Size, btnBlur.Position = UDim2.new(1,0,0,25), UDim2.new(0,0,0,85)
+btnBlur.Size, btnBlur.Position = UDim2.new(1, 0, 0, 25), UDim2.new(0, 0, 0, 85)
 btnBlur.Text = "Toggle Blur"
-btnBlur.MouseButton1Click:Connect(function() toggleBlur(blur.Size == 0) end)
+btnBlur.MouseButton1Click:Connect(function()
+    toggleBlur(blur.Size == 0) -- Enable blur if currently disabled, and vice versa
+end)
 
-local btnTPBank = Instance.new("TextButton", panel)
-btnTPBank.Size, btnTPBank.Position = UDim2.new(1,0,0,25), UDim2.new(0,0,0,115)
-btnTPBank.Text = "Teleport to Bank"
-btnTPBank.MouseButton1Click:Connect(function() safeTeleport(CONFIG.BANK_LOCATION) end)
+local btnSmoke = Instance.new("TextButton", panel)
+btnSmoke.Size, btnSmoke.Position = UDim2.new(1, 0, 0, 25), UDim2.new(0, 0, 0, 115)
+btnSmoke.Text = "Toggle Smoke"
+btnSmoke.MouseButton1Click:Connect(function()
+    toggleSmoke(not smoke.Enabled) -- Enable smoke if currently disabled, and vice versa
+end)
+
+-- Remaining code continues as is...
