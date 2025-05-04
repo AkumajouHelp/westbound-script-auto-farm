@@ -41,3 +41,26 @@ R.RenderStepped:Connect(function() s.Text="Status: "..(f and "Farming" or "Idle"
 local bCloak=Instance.new("TextButton",p) bCloak.Size,bCloak.Position=UDim2.new(1,0,0,25),UDim2.new(0,0,0,55) bCloak.Text="Toggle Cloak" bCloak.MouseButton1Click:Connect(function() tC(not c.Visible) end)
 local bBlur=Instance.new("TextButton",p) bBlur.Size,bBlur.Position=UDim2.new(1,0,0,25),UDim2.new(0,0,0,85) bBlur.Text="Toggle Blur" bBlur.MouseButton1Click:Connect(function() tB(b.Size==0) end)
 local bTPB=Instance.new("TextButton",p) bTPB.Size,bTPB.Position=UDim2.new(1,0,0,25),UDim2.new(0,0,0,115) bTPB.Text="Teleport to Bank" bTPB.MouseButton1Click:Connect(function() sT(CFrame.new(-210,24,150)) end)
+
+--// Draggable functionality for the "Dev Panel"
+local dragging, dragInput, dragStart, startPos
+p.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = p.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+p.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStart
+        p.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
