@@ -50,7 +50,8 @@ Use it with **any Roblox executor** that supports `loadstring` and `HttpGet`, su
 ==========================================================================================================================
 ⚠️ Disclaimer
 
-This script is for educational purposes only. Use at your own risk. I’m not responsible for any bans
+This script is for educational purposes only. Use at your own risk.
+I’m not responsible for any bans
 or account actions caused by exploiting or modifying Roblox.
 
 
