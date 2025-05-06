@@ -46,14 +46,13 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westboun
 
 4. Click "Start Auto Farm" to begin farming!
 
----
+
 
 ⚠️ Disclaimer
 
 This script is for educational purposes only. Use at your own risk. I’m not responsible for any bans or account actions caused by exploiting or modifying Roblox.
 
 
----
 
 🧠 Credits
 
@@ -62,7 +61,6 @@ Script created by: AkumajouHelp
 Tested on: Arceus X Neon (Android)
 
 
----
 
 📄 License
 
