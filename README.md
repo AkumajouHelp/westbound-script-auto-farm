@@ -37,6 +37,16 @@ loadstring(game:HttpGet("https://pastebin.com/raw/5TU8iPKE"))()
 
 7. Click "Start Auto Farm" to begin farming!
 
+---
+
+## 💻 How to Use (PC - Arceus X Neon: for any software) 
+Use it with **any Roblox executor** that supports `loadstring` and `HttpGet`, such as:
+- Arceus X
+- Arcexus
+- Delta
+- Hydrogen
+- Codex
+
 ==========================================================================================================================
 ⚠️ Disclaimer
 
