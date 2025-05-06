@@ -71,12 +71,49 @@ local function selectBestWeapon()
     end
 end
 
+-- Ammo Management
+local function manageAmmo()
+    local inventory = player:WaitForChild("Backpack")
+    for _, tool in pairs(inventory:GetChildren()) do
+        if tool:IsA("Tool") then
+            local ammo = tool:FindFirstChild("Ammo")
+            if ammo and ammo.Value == 0 then
+                -- Switch to another weapon if ammo is depleted
+                selectBestWeapon()
+                return
+            end
+        end
+    end
+end
+
+-- ESP for Enemies
+local function createESPForEnemy(enemy)
+    local esp = Instance.new("BillboardGui")
+    esp.Adornee = enemy
+    esp.Parent = game.CoreGui
+    esp.Size = UDim2.new(0, 100, 0, 100)
+    esp.StudsOffset = Vector3.new(0, 3, 0)
+    esp.AlwaysOnTop = true
+    esp.StudsOffsetWorldSpace = Vector3.new(0, 3, 0)
+
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Size = UDim2.new(0, 100, 0, 20)
+    textLabel.Position = UDim2.new(0, 0, 0, 0)
+    textLabel.Text = enemy.Name
+    textLabel.BackgroundTransparency = 1
+    textLabel.TextColor3 = Color3.new(1, 0, 0)
+    textLabel.TextSize = 16
+    textLabel.Parent = esp
+end
+
 -- Kill Aura
 local function killNearbyEnemies()
     for _, model in pairs(workspace:GetChildren()) do
         if model:FindFirstChild("Humanoid") and model:FindFirstChild("HumanoidRootPart") and model ~= char then
             local distance = (hrp.Position - model.HumanoidRootPart.Position).Magnitude
             if distance <= killAuraRange then
+                -- ESP for enemy
+                createESPForEnemy(model)
                 model.Humanoid.Health = 0
             end
         end
@@ -93,10 +130,30 @@ local function autoSell()
     end
 end
 
+-- Notification function
+local function createNotification(message)
+    local notification = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+    local label = Instance.new("TextLabel", notification)
+    label.Size = UDim2.new(0, 300, 0, 50)
+    label.Position = UDim2.new(0.5, -150, 0, 20)
+    label.Text = message
+    label.TextSize = 24
+    label.BackgroundColor3 = Color3.new(0, 0, 0)
+    label.BackgroundTransparency = 0.5
+    label.TextColor3 = Color3.new(1, 1, 1)
+
+    -- Remove after a few seconds
+    task.wait(3)
+    notification:Destroy()
+end
+
 -- Auto Farm Loop
 local function autoFarm()
     while farming do
         task.wait(0.5)
+
+        -- Ammo Management
+        manageAmmo()
 
         if not hrp or not char then
             updateCharacter()
@@ -114,12 +171,16 @@ local function autoFarm()
                     hrp.CFrame = coyote.HumanoidRootPart.CFrame * CFrame.new(0, 0, 2)
                     task.wait(0.2)
                     coyote.Humanoid.Health = 0
+                    createNotification("Coyote Defeated!")
                 end
             end
         end
 
         -- Sell items if near merchant
-        autoSell()
+        if sellingPoint and (hrp.Position - sellingPoint.Position).Magnitude < 20 then
+            createNotification("Selling Items...")
+            autoSell()
+        end
 
         -- Kill aura around player
         killNearbyEnemies()
@@ -127,6 +188,7 @@ local function autoFarm()
         -- Coyote respawn delay (simulate)
         if tick() > respawnTimer then
             respawnTimer = tick() + 10
+            createNotification("Coyotes Respawned!")
         end
     end
 end
@@ -138,6 +200,7 @@ toggleButton.MouseButton1Click:Connect(function()
     toggleButton.BackgroundColor3 = farming and Color3.new(0.6, 0, 0) or Color3.new(0, 0.6, 0)
 
     if farming then
+        createNotification("Starting Auto Farm!")
         coroutine.wrap(autoFarm)()
     end
 end)
