@@ -14,6 +14,7 @@ A full-featured, optimized auto farm script for **Roblox: Westbound**, designed 
 - **Coyote Respawn Tracker**: Monitors coyotes' respawn times and notifies the player when a coyote has respawned.
 - **Simple GUI**: Features a toggle button for starting and stopping the auto-farming process with ease.
 - **Notifications**: Provides notifications for important events such as defeating a coyote, selling items, or when a coyote respawns.
+- **GUI Auto Hide on Death:** Automatically hides the in-game GUI when the player dies and respawns. This helps maintain a cleaner UI during gameplay, ensuring the interface is not visible during the respawn process. The GUI will be re-enabled when the player starts interacting again.
 
 ---
 
