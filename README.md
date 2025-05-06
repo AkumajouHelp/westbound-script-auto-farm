@@ -29,11 +29,9 @@ It helps players grind faster, avoid manual effort, and earn money efficiently w
 Perfect for users on Android using Arceus X or similar software.
 
 **NOT Implemented Features:**
-Teleport to Train Heist
-
-Auto deposit money in the bank
-
-Enemy ESP or screen smoke effect
+1. Teleport to Train Heist
+2. Auto deposit money in the bank
+3. Enemy ESP or screen smoke effect
 
 Chat command (!togglefarm)
 
