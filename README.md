@@ -25,7 +25,7 @@ A full-featured, optimized auto farm script for **Roblox: Westbound**, designed 
 3. Open the **executor** and paste this:
 
 ```lua
-loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/main/script.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/main/auto_script.lua"))()
 
 4. Click "Start Auto Farm" to begin farming!
 
