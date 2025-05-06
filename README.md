@@ -30,6 +30,13 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westboun
 4. Click "Start Auto Farm" to begin farming!
 
 
+## Notes
+
+- This script is designed to be used on **Android** devices with **Arceus X Neon**.
+- The script is **not intended for** any unfair advantage or to bypass game mechanics.
+- Always use scripts responsibly and respect the Roblox community guidelines.
+
+
 ==========================================================================================================================
 ⚠️ Disclaimer
 
