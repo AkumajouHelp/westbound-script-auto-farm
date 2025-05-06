@@ -28,6 +28,15 @@ This script is created to automatically farm coyote coins and sell items in the 
 It helps players grind faster, avoid manual effort, and earn money efficiently with minimal lag. 
 Perfect for users on Android using Arceus X or similar software.
 
+**NOT Implemented Features:**
+Teleport to Train Heist
+
+Auto deposit money in the bank
+
+Enemy ESP or screen smoke effect
+
+Chat command (!togglefarm)
+
 **APPLICATION:**
 https://www.mediafire.com/file/p5s58u1u34da2rn/Roblox_Arceus_X_NEO_1.6.5.apk/file?dkey=vr8ys86usvq&r=1127
 
