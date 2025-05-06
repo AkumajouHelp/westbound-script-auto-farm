@@ -1,4 +1,4 @@
-# Westbound Auto Farm Script (Arceus X Neon PC/Android Compatible)
+# Westbound Auto Farm Script (Arceus X Neon: Android & PC Compatible)
 
 A full-featured, optimized auto farm script for **Roblox: Westbound**, designed for **Android users** and **PC** using **Arceus X Neon**. This script automatically farms coyotes, auto-sells items, kills nearby enemies with kill aura, equips the best weapon, and prevents getting kicked for being AFK and more.
 
