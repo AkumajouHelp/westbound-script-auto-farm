@@ -24,10 +24,16 @@ This script automatically farms items and sells them in Westbound. It includes f
 - Blur/Smoke overlay effects
 
 Not Implemented Advanced Features:
-1. Teleport to Train Heist
-2. Auto deposit money in the bank
-3. Enemy ESP or screen smoke effect
-4. Chat command (!togglefarm)
+
+These are additional features that have not been added to the script yet, but could be included in future updates. Examples of such features include:
+
+Teleport to Train Heist: Automatically teleports you to a train heist location.
+
+Auto Deposit to Bank: Automatically deposits earned money/items into the bank.
+
+ESP (Enemy-Specific): Displays the locations of enemies, even through walls.
+
+Advanced Combat Mechanics: Features like kill aura, smart targeting, or enhanced combat efficiency.
 
 
 **Purpose:**
