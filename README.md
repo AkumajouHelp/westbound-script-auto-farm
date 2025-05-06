@@ -5,7 +5,7 @@ A full-featured, optimized auto farm script for **Roblox: Westbound**, designed 
 ---
 
 ## ✅ Features
-**Auto Farm**: Automatically targets and kills coyotes, making farming efficient and effortless.
+- **Auto Farm**: Automatically targets and kills coyotes, making farming efficient and effortless.
 - **Auto Sell**: Automatically sells items when near the merchant, ensuring that the player's inventory is always optimized.
 - **Ammo Management**: The script checks the player's inventory and automatically switches weapons when ammo is depleted.
 - **Kill Aura**: Automatically kills enemies within a specified range of the player, making it easier to clear out threats.
