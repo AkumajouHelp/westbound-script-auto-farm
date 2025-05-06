@@ -5,33 +5,15 @@ A full-featured, optimized auto farm script for **Roblox: Westbound**, designed 
 ---
 
 ## ✅ Features
-
-- **Auto Farm Coyotes** – Instantly attacks all coyotes nearby.
-- **Auto Sell Items** – Sells items at the merchant automatically when close.
-- **Kill Aura** – Automatically kills enemies near the player.
-- **Auto Equip Best Weapon** – Picks the highest-damage weapon from your backpack.
-- **Anti-AFK** – Prevents getting kicked for being idle.
-- **GUI Toggle Button** – Start/stop the farm from a button on your screen.
-- **Auto Respawn Handler** – Re-equips weapon on character respawn.
-
----
-
-## ❌ Not Implemented Advanced Features (yet)
-
-These are planned or optional features that are not in this version:
-
-- Auto bank deposit  
-- Safe mode (to avoid PvP zones or lawmen)  
-- Auto equip based on ammo or weapon type  
-- Train Heist auto teleport  
-- Coyote respawn tracker with visuals  
-- Auto GUI close on death  
-- Notifications (chat or UI alerts)  
-- Enemy ESP  
-- Blur cloak / visual screen protector for stealth recording  
-- Chat command toggle (e.g. `!togglefarm`)  
-- Pastebin fallback loader  
-- Config saving & loading
+**Auto Farm**: Automatically targets and kills coyotes, making farming efficient and effortless.
+- **Auto Sell**: Automatically sells items when near the merchant, ensuring that the player's inventory is always optimized.
+- **Ammo Management**: The script checks the player's inventory and automatically switches weapons when ammo is depleted.
+- **Kill Aura**: Automatically kills enemies within a specified range of the player, making it easier to clear out threats.
+- **ESP for Enemies**: Highlights enemies with a visual marker, making it easier to locate and eliminate them.
+- **Anti-AFK**: Prevents the player from being kicked for inactivity by simulating mouse input.
+- **Coyote Respawn Tracker**: Monitors coyotes' respawn times and notifies the player when a coyote has respawned.
+- **Simple GUI**: Features a toggle button for starting and stopping the auto-farming process with ease.
+- **Notifications**: Provides notifications for important events such as defeating a coyote, selling items, or when a coyote respawns.
 
 ---
 
