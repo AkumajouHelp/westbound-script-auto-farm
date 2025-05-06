@@ -39,7 +39,7 @@ loadstring(game:HttpGet("https://pastebin.com/raw/5TU8iPKE"))()
 
 ---
 
-## 💻 How to Use (PC - Arceus X Neon: for any software) 
+## 💻 How to Use (PC/Android - Arceus X Neon: for any software) 
 Use it with **any Roblox executor** that supports `loadstring` and `HttpGet`, such as:
 - Arceus X
 - Arcexus
