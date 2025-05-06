@@ -27,7 +27,7 @@ A full-featured, optimized auto farm script for **Roblox: Westbound**, designed 
 ```lua
 loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/main/auto_script.lua"))()
 
-OR
+**OR**
 
 loadstring(game:HttpGet("https://pastebin.com/raw/5TU8iPKE"))()
 
