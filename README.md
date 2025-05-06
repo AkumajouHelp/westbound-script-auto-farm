@@ -1,6 +1,6 @@
 # Westbound Auto Farm Script
 
-**This script automatically farms items and sells them in Westbound. It includes features like:**
+This script automatically farms items and sells them in Westbound. It includes features like
 - Auto-sell when inventory is full
 - Auto-farming for quick coin collection
 - Optimized for no lag and minimal crashes
