@@ -23,7 +23,7 @@ This script automatically farms items and sells them in Westbound. It includes f
 - Ammo Smart System
 - Blur/Smoke overlay effects
 
-**NOT Implemented Advanced Features:**
+**Not Implemented Advanced Features:**
 1. Teleport to Train Heist
 2. Auto deposit money in the bank
 3. Enemy ESP or screen smoke effect
