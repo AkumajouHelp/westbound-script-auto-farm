@@ -35,7 +35,7 @@ These are planned or optional features that are not in this version:
 
 ---
 
-## 📱 How to Use (Android - Arceus X Neon)
+## 📱 How to Use (And$roid - Arceus X Neon)
 
 1. **Download Arceus X Neon** from the official website.
 2. Join **Roblox: Westbound**.
@@ -48,6 +48,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westboun
 
 
 ==========================================================================================================================
+=====
 ⚠️ Disclaimer
 
 This script is for educational purposes only. Use at your own risk. I’m not responsible for any bans or account actions caused by exploiting or modifying Roblox.
