@@ -18,7 +18,7 @@ A full-featured, optimized auto farm script for **Roblox: Westbound**, designed 
 
 ---
 
-## 📱 How to Use (And$roid - Arceus X Neon)
+## 📱 How to Use (Android - Arceus X Neon)
 
 1. **Download Arceus X Neon** from the official website.
 2. Join **Roblox: Westbound**.
