@@ -34,14 +34,6 @@ loadstring(game:HttpGet("https://pastebin.com/raw/5TU8iPKE"))()
 
 4. Click "Start Auto Farm" to begin farming!
 
-
-## Note
-
-- This script is designed to be used on **Android** devices with **Arceus X Neon**.
-- The script is **not intended for** any unfair advantage or to bypass game mechanics.
-- Always use scripts responsibly and respect the Roblox community guidelines.
-
-
 ==========================================================================================================================
 ⚠️ Disclaimer
 
