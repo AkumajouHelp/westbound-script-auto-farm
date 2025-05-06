@@ -21,8 +21,11 @@ A full-featured, optimized auto farm script for **Roblox: Westbound**, designed 
 ## 📱 How to Use (Android - Arceus X Neon)
 
 1. **Download Arceus X Neon** from the official website.
-2. Join **Roblox: Westbound**.
-3. Open the **executor** and paste this:
+2. Install the application.
+3. Copy the raw URL of this script from GitHub.
+4. Open **Roblox: Application**.
+5. Join **Roblox: Westbound**.
+6. Open the **executor** and paste this URL in Arceus X Neon and Press Execute:
 
 ```lua
 loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/main/auto_script.lua"))()
@@ -32,7 +35,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westboun
 loadstring(game:HttpGet("https://pastebin.com/raw/5TU8iPKE"))()
 
 
-4. Click "Start Auto Farm" to begin farming!
+7. Click "Start Auto Farm" to begin farming!
 
 ==========================================================================================================================
 ⚠️ Disclaimer
