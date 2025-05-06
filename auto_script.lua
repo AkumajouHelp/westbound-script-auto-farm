@@ -15,6 +15,8 @@ player.CharacterAdded:Connect(function()
         task.wait(1)
         char:WaitForChild("Humanoid"):EquipTool(bestWeapon)
     end
+    -- Close GUI on Death
+    screenGui.Enabled = false
 end)
 
 -- GUI Setup
@@ -147,6 +149,28 @@ local function createNotification(message)
     notification:Destroy()
 end
 
+-- Smart Coyote Respawn Detection
+local function trackCoyoteRespawn()
+    local respawnedCoyotes = {}
+    
+    -- Detect coyotes that have been defeated and respawned
+    for _, coyote in pairs(coyotes:GetChildren()) do
+        if coyote:FindFirstChild("Humanoid") and coyote.Humanoid.Health <= 0 then
+            if not respawnedCoyotes[coyote] then
+                respawnedCoyotes[coyote] = tick()
+            end
+        end
+    end
+    
+    -- Check if any respawned coyotes are back
+    for coyote, respawnTime in pairs(respawnedCoyotes) do
+        if tick() - respawnTime >= 10 then -- Adjust respawn time as needed
+            respawnedCoyotes[coyote] = nil
+            createNotification("Coyote Respawned!")
+        end
+    end
+end
+
 -- Auto Farm Loop
 local function autoFarm()
     while farming do
@@ -185,11 +209,8 @@ local function autoFarm()
         -- Kill aura around player
         killNearbyEnemies()
 
-        -- Coyote respawn delay (simulate)
-        if tick() > respawnTimer then
-            respawnTimer = tick() + 10
-            createNotification("Coyotes Respawned!")
-        end
+        -- Track Coyote Respawn
+        trackCoyoteRespawn()
     end
 end
 
