@@ -1,74 +1,71 @@
-# Westbound Auto Farm Script
+# Westbound Auto Farm Script (Arceus X Neon Android Compatible)
 
-This script automatically farms items and sells them in Westbound. It includes features like
-- Auto-sell when inventory is full
-- Auto-farming for quick coin collection
-- Optimized for no lag and minimal crashes
-- Fast auto kill
-- Faster selling
-- Quicker teleporting
-- Auto farming
-- Auto farm coyotes
-- Auto sell at General Store
-- Anti-AFK (stay in-game)
-- Auto respawn
-- Safe teleport
-- GUI with buttons
-- Low lag & safe teleports
-- Teleport to Train Heist
-- Instant Deposit to Bank
-- Auto farm coyotes across the entire map
-- Anti Cheat
-- Chat command: !togglefarm
-- Ammo Smart System
-- Blur/Smoke overlay effects
+A full-featured, optimized auto farm script for **Roblox: Westbound**, designed for **Android users** using **Arceus X Neon**. This script automatically farms coyotes, auto-sells items, kills nearby enemies with kill aura, equips the best weapon, and prevents getting kicked for being AFK.
 
-**Not Implemented Advanced Features:**
+---
 
-These are additional features that have not been added to the script yet, but could be included in future updates. Examples of such features include:
+## ✅ Features
 
-- Teleport to Train Heist: Automatically teleports you to a train heist location.
-- Auto Deposit to Bank: Automatically deposits earned money/items into the bank.
-- ESP (Enemy-Specific): Displays the locations of enemies, even through walls.
-- Advanced Combat Mechanics: Features like kill aura, smart targeting, or enhanced combat efficiency.
+- **Auto Farm Coyotes** – Instantly attacks all coyotes nearby.
+- **Auto Sell Items** – Sells items at the merchant automatically when close.
+- **Kill Aura** – Automatically kills enemies near the player.
+- **Auto Equip Best Weapon** – Picks the highest-damage weapon from your backpack.
+- **Anti-AFK** – Prevents getting kicked for being idle.
+- **GUI Toggle Button** – Start/stop the farm from a button on your screen.
+- **Auto Respawn Handler** – Re-equips weapon on character respawn.
+
+---
+
+## ❌ Not Implemented Advanced Features (yet)
+
+These are planned or optional features that are not in this version:
+
+- Auto bank deposit  
+- Safe mode (to avoid PvP zones or lawmen)  
+- Auto equip based on ammo or weapon type  
+- Train Heist auto teleport  
+- Coyote respawn tracker with visuals  
+- Auto GUI close on death  
+- Notifications (chat or UI alerts)  
+- Enemy ESP  
+- Blur cloak / visual screen protector for stealth recording  
+- Chat command toggle (e.g. `!togglefarm`)  
+- Pastebin fallback loader  
+- Config saving & loading
+
+---
+
+## 📱 How to Use (Android - Arceus X Neon)
+
+1. **Download Arceus X Neon** from the official website.
+2. Join **Roblox: Westbound**.
+3. Open the **executor** and paste this:
+
+```lua
+loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/main/script.lua"))()
+
+4. Click "Start Auto Farm" to begin farming!
+
+---
+
+⚠️ Disclaimer
+
+This script is for educational purposes only. Use at your own risk. I’m not responsible for any bans or account actions caused by exploiting or modifying Roblox.
 
 
-**Purpose:**
-This script is created to automatically farm coyote coins and sell items in the game Westbound. 
-It helps players grind faster, avoid manual effort, and earn money efficiently with minimal lag. 
-Perfect for users on Android using Arceus X or similar software.
+---
 
-**APPLICATION:**
-https://www.mediafire.com/file/p5s58u1u34da2rn/Roblox_Arceus_X_NEO_1.6.5.apk/file?dkey=vr8ys86usvq&r=1127
+🧠 Credits
+
+Script created by: AkumajouHelp
+
+Tested on: Arceus X Neon (Android)
 
 
-### How to Use In Android:
-1. Copy the raw URL of this script from GitHub.
-2. Paste the URL in Arceus X Neon and press Execute.
-3. Enjoy the auto-farming!
+---
 
-### How to Use In Any Software:
-Use it with **any Roblox executor** that supports `loadstring` and `HttpGet`, such as:
-- Arceus X
-- Arcexus
-- Delta
-- Hydrogen
-- Codex
+📄 License
 
-**Quick Command:**
-To toggle the auto farm, just type !togglefarm in the Roblox chat.
+This project is open-source under the MIT License.
 
-**`SCRIPT`**
-
-loadstring(game:HttpGet("https://raw.githubusercontent.com/AkumajouHelp/westbound-script-auto-farm/refs/heads/main/auto_script.lua"))()
-
-**OR**
-
-loadstring(game:HttpGet("https://pastebin.com/raw/5TU8iPKE"))()
-### Credits:
-Created by AkumajouHelp.
-Modified by Ryokun.
-Contact: Discord: ryokun2337.
-        Facebook: https://www.facebook.com/profile.php?id=100083718851963
-        PasteBin: https://pastebin.com/u/AkumajouHelp
-        
+Let me know if you want to add badges, screenshots, or a usage demo!
