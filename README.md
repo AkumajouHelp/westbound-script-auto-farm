@@ -1,6 +1,6 @@
 # Westbound Auto Farm Script
 
-This script automatically farms items and sells them in Westbound. It includes features like:
+**This script automatically farms items and sells them in Westbound. It includes features like:**
 - Auto-sell when inventory is full
 - Auto-farming for quick coin collection
 - Optimized for no lag and minimal crashes
@@ -30,7 +30,7 @@ This script automatically farms items and sells them in Westbound. It includes f
 4. Chat command (!togglefarm)
 
 
-Purpose:
+**Purpose:**
 This script is created to automatically farm coyote coins and sell items in the game Westbound. 
 It helps players grind faster, avoid manual effort, and earn money efficiently with minimal lag. 
 Perfect for users on Android using Arceus X or similar software.
