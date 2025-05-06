@@ -27,6 +27,8 @@ This script automatically farms items and sells them in Westbound. It includes f
 1. Teleport to Train Heist
 2. Auto deposit money in the bank
 3. Enemy ESP or screen smoke effect
+4. Chat command (!togglefarm)
+
 
 Purpose:
 This script is created to automatically farm coyote coins and sell items in the game Westbound. 
