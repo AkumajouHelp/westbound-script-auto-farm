@@ -23,7 +23,7 @@ This script automatically farms items and sells them in Westbound. It includes f
 - Ammo Smart System
 - Blur/Smoke overlay effects
 
-**NOT Implemented Features:**
+**NOT Implemented Advanced Features:**
 1. Teleport to Train Heist
 2. Auto deposit money in the bank
 3. Enemy ESP or screen smoke effect
@@ -34,8 +34,6 @@ Purpose:
 This script is created to automatically farm coyote coins and sell items in the game Westbound. 
 It helps players grind faster, avoid manual effort, and earn money efficiently with minimal lag. 
 Perfect for users on Android using Arceus X or similar software.
-
-Chat command (!togglefarm)
 
 **APPLICATION:**
 https://www.mediafire.com/file/p5s58u1u34da2rn/Roblox_Arceus_X_NEO_1.6.5.apk/file?dkey=vr8ys86usvq&r=1127
