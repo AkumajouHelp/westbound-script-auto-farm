@@ -50,4 +50,4 @@ Tested on: Arceus X Neon (Android)
 
 This project is open-source under the MIT License.
 
-Let me know if you want to add badges, screenshots, or a usage demo!
+Let me know if you want to add badges, screenshots, or a usage demo etc!
